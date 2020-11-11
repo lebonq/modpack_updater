@@ -9,21 +9,46 @@ import fr.lebonq.files.FilesManager;
 import fr.lebonq.mods.ModsManager;
 import fr.lebonq.remote.Downloader;
 
-class App {
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
-    public static void main(String[] args) {
+public class App extends Application{
+    private  FilesManager aFilesManager;
+    private ModsManager aModsManager;
+    private String aAppVersion;
+    private ServerConfig aServerConfig;
 
-        FilesManager vFilesManager = new FilesManager();
-        ModsManager vModsManager = null;
+    @Override
+    public void start(Stage stage) {
+        Label l = new Label(this.aAppVersion);
+        Scene scene = new Scene(new StackPane(l), 640, 480);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @Override
+    public void init(){
+        this.aFilesManager = new FilesManager();
+        this.aModsManager = null;
         final Properties vProperties = new Properties();
-        ServerConfig vServerConfig = ConfigFactory.create(ServerConfig.class);
+
+        this.aServerConfig = ConfigFactory.create(ServerConfig.class);
 
         try {
-            vProperties.load(vFilesManager.getClass().getClassLoader().getResourceAsStream("project.properties")); //Permet d'acceder au fichier ressoruces pour recupérer la version du fichier pom.xml
+            vProperties.load(this.aFilesManager.getClass().getClassLoader().getResourceAsStream("project.properties")); //Permet d'acceder au fichier ressoruces pour recupérer la version du fichier pom.xml
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        System.out.println("Modpack_updater version " + vProperties.getProperty("version"));
+        this.aAppVersion = vProperties.getProperty("version");
+        System.out.println("Modpack_updater version " + this.aAppVersion);
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
+        /*
 
         if(!(vFilesManager.checkIfModsExists())){//le dossier mods n'existe pas, donc il faut tout telecharger
             try{
@@ -53,7 +78,7 @@ class App {
                 e.printStackTrace();
                 return;
             }
-        }
+        }*/
         
     }
 }
