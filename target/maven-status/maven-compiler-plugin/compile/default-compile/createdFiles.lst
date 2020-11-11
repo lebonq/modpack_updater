@@ -1,0 +1,9 @@
+fr\lebonq\mods\ModsManager.class
+fr\lebonq\files\FilesManager.class
+fr\lebonq\ServerConfig.class
+fr\lebonq\utils\LoadingAnim.class
+fr\lebonq\App.class
+fr\lebonq\mods\Mod.class
+fr\lebonq\mods\ModJsonManager.class
+fr\lebonq\remote\Downloader.class
+fr\lebonq\utils\IsContain.class
