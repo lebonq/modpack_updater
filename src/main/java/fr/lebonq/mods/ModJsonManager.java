@@ -15,15 +15,20 @@ public class ModJsonManager {
      */
     public static String[] getModInfo(File pFile) {
         JsonParser vJsonP = new JsonParser(); //On cree le parswer
+        String vName = null;//On le cree en amont pout retourner null sur le champs n'existe aps dans le JSON
+        String vVersion = null;
+        String vImage = null;
+        String vDescription = null;
         try {
             JsonObject vJsonO = (JsonObject) vJsonP.parse(new FileReader(pFile));//On converti en JsonObject pour avoir acces a tout les champs
        
-            String vName = vJsonO.get("name").getAsString();//On recupere la String correpondante
-            String vVersion = vJsonO.get("version").getAsString();
-            return new String[]{vName,vVersion};
+            vName = vJsonO.get("name").getAsString();//On recupere la String correpondante
+            vVersion = vJsonO.get("version").getAsString();
+            vImage = vJsonO.get("icon").getAsString();
+            vDescription = vJsonO.get("description").getAsString();
+            return new String[]{vName,vVersion,vImage,vDescription};
         }catch(Exception pE){
-            //Si erreur car Optifine ou pas de fichier Json alors on met le nom du fichier dans name et version
-            return new String[]{pFile.getName(),pFile.getName()};
+            return new String[]{vName,vVersion,vImage,vDescription};
         }
     }
 }
