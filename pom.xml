@@ -86,7 +86,13 @@
 			<artifactId>javafx-controls</artifactId>
 			<version>15.0.1</version>
 		</dependency>
-	</dependencies>
+	
+		<dependency>
+			<groupId>com.robotaccomplice</groupId>
+			<artifactId>jais</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+ </dependencies>
 	  
 	<distributionManagement>
 		<repository>

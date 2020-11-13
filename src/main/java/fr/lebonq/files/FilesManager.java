@@ -148,15 +148,17 @@ public class FilesManager{
     /**
 	 *  Methode qui permet d'extraire le fichier JSON des mods fabrics
 	 * @param pFile l'objet File de notre fichier .jar
+     * @param pFileToExtract Le fichier a extraire
 	 * @return l'objet File de notre fichier fabric.mod.json
 	 */
-	public File extractJson(File pFile){
+	public File extractFromJar(File pFile,String pFileToExtract){
+        //System.out.println(pFileToExtract);
 		JarFile vJarFile = null;
 		File vJsonFile = null;
 		try {
 			vJarFile = new JarFile(pFile);
 			try {
-				String vName = "fabric.mod.json";
+				String vName = pFileToExtract;
 				//On récupère l'objet ZipEntry correspondant
 				ZipEntry vEntry = vJarFile.getEntry(vName);
 				// On crée un File représentant le fichier  :
@@ -187,7 +189,7 @@ public class FilesManager{
 				vJarFile.close();
 			}
 		} catch (NullPointerException pE) {
-			System.out.println("Fichier " + pFile.getName() + " non reconnu");
+			System.out.println("Fichier " + pFileToExtract + " introuvable");
 			return pFile;//Si erreur car Optifine ou pas de fichier Json dans le mod on retourne le fichier lui meme
 		}catch(Exception pE){
 			pE.printStackTrace();
