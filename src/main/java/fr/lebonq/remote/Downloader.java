@@ -64,7 +64,7 @@ public class Downloader {
                     while ( (vLen=vWebFile.read(vBuf)) > 0 ) {
                         vOutput.write(vBuf, 0, vLen);
                         VLenC+=vLen; //On ajoute la taille du buf lu
-                        //System.out.print(LoadingAnim.anim((VLenC*100l)/vTotalSize) + "\r");//ON affiche le pourcentage
+                        System.out.print(LoadingAnim.anim((VLenC*100l)/vTotalSize) + "\r");//ON affiche le pourcentage
                         pController.setDownloadProgressbar((double)((VLenC*100l)/vTotalSize)/100);//On met a jour la progressbar
                     }
                     System.out.println("");

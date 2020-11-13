@@ -28,6 +28,7 @@ public class FilesManager{
     public FilesManager() {
         this.aFolderMods = new File("mods");
         this.aFileVersion = new File("mods/.version.txt");
+        createMods();
     }
 
     /**
