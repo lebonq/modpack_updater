@@ -49,6 +49,7 @@ public class ModsManager {
         for (int i = 0; i < this.aNumberOfMods; i++) {
             System.out.println(this.aModsList[i]);
         }
+        this.aController.setLittleUpdateLabel("Les mods prennent un espace totale de " + (int)this.aTotalSize + " Mo");
         System.out.println("Les mods prennent un espace totale de " + (int)this.aTotalSize + " Mo");
     }
 
@@ -56,18 +57,32 @@ public class ModsManager {
         return this.aNumberOfMods;
     }
 
+    public Mod[] getMods(){
+        return this.aModsList;
+    }
+    
     public void updateModFiles(final String[][] pFiles){
         int vNbFiles = pFiles.length-1;
         int i = 0; 
         int j = 0;
         while(i < vNbFiles){
+            if(i == this.aNumberOfMods){//Si nous avons deja parcouru tout les mods locaux alors on telecharge tout les restes
+                while(i <= vNbFiles){
+                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, "mods/", pFiles[j][2].replaceAll(".json", ""),this.aController);
+                    this.aController.updateList();
+                    i++;j++;
+                }
+                return;
+            }
             if(!(this.aModsList[i].getName().equals(pFiles[j][0]))){//Si les noms sont differente c'est que le mods distant manque en local
                 if(IsContain.isContain(i, 0, pFiles, this.aModsList[i].getName())){
                     Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, "mods/", pFiles[j][2].replaceAll(".json", ""),this.aController);
+                    this.aController.updateList();
                     //Ici les replaceAll permet de retirer le .json du path du fichier
                     j++;//on avance j mais pas i
                 }
                 else{
+                    this.aController.setLittleUpdateLabel("Suppression d'un mod obselete");
                     System.out.println("Suppression d'un mod obselete");
                     this.aModsList[i].getFile().delete();
                     i++;//On avance i car le mods doit etre supprimer
@@ -77,6 +92,7 @@ public class ModsManager {
                 if(!(this.aModsList[i].getVersion().equals(pFiles[j][1]))){//On compare les versions si differente on met a jour
                     this.aModsList[i].getFile().delete();
                     Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, "mods/", pFiles[j][2].replaceAll(".json", ""),this.aController);
+                    this.aController.updateList();
                     i++;
                     j++;
                 }
