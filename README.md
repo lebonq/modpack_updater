@@ -10,7 +10,7 @@ Le programme est à exécuter dans le dossier .minecraft.
 
 ### Configuration
 
-Avant de le distribuer aux joueurs, veuilluez configurer le fichier configApp.properties du dossier config.
+Avant de le distribuer aux joueurs, veuillez configurer le fichier configApp.properties du dossier config.
 
 ### To-do
 
