@@ -1,13 +1,19 @@
 # modpack_updater
 
-Cet outil permet de vérifier si la version du modpack correspond à celle du serveur et de mettre à jour les mods pour le Modloader Fabric.
+Ce logiciel permet de maintenir les mods [Fabric](https://fabricmc.net/) des joueurs a jour des modpacks crees avec [modpack_uploader](https://github.com/lebonq/modpack_uploader).
 
 ## Utilisation
 
+** Necessite Java 8 au minimun **
+
 Le programme est à exécuter dans le dossier .minecraft.
 
-## Configuration
+### Configuration
 
-Vous aurez aussi besoin du projet modpack_uploader qui va de pair avec cet updater. (projet pas encore publie)
+Avant de le distribuer aux joueurs, veuilluez configurer le fichier configApp.properties du dossier config.
 
-L'url ou se trouvent vos fichiers JSON et .jar distant sont a specifier dans le fichier configServer.properties
+### To-do
+
+1. Lancer Minecraft depuis le launcher
+2. Installer Minecraft et Fabric depuis le launcher
+3. Inserer directement le fichier server.dat avec l'adresse du server
