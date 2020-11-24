@@ -6,7 +6,7 @@
 	<packaging>jar</packaging>
 	<groupId>fr.lebonq</groupId>
 	<artifactId>modpack_updater</artifactId>
-	<version>3.0-beta</version>
+	<version>3.0</version>
 
 	<name>modpack_updater</name>
 

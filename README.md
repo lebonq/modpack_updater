@@ -4,9 +4,9 @@ Ce logiciel permet de maintenir les mods [Fabric](https://fabricmc.net/) des jou
 
 ## Utilisation
 
-**Necessite Java 8 au minimun**
+**Necessite Java 14 au minimun**
 
-Le programme est à exécuter dans le dossier .minecraft.
+Le programme est à exécuter dans avec le dossier config dans le meme repertoire.
 
 ### Configuration
 
@@ -14,10 +14,15 @@ Avant de le distribuer aux joueurs, veuillez configurer le fichier configApp.pro
 
 ### To-do
 
-1. Lancer Minecraft depuis le launcher
-2. Installer Minecraft et Fabric depuis le launcher
+1. ~~Lancer Minecraft depuis le launcher~~
+2. ~~Installer Minecraft et Fabric depuis le launcher~~
 3. Inserer directement le fichier server.dat avec l'adresse du server
+4. Messages d'erreurs plus explicite
+5. Java inclus dans la release
+6. Ajout remind me
 
-#### Credit
+#### Sources from part of the code
 
-To get access token from username, password and UUID https://www.spigotmc.org/threads/how-to-get-api-mojang-minecraft-client-access-token.159019/
+To get access token, UUID and display name from username, password inspired by <https://www.spigotmc.org/threads/how-to-get-api-mojang-minecraft-client-access-token.159019/>
+SHA1 calculator from  <https://stackoverflow.com/questions/6293713/java-how-to-create-sha-1-for-a-file>
+Name of librarie to path <https://github.com/ATLauncher/ATLauncher/blob/5a90f8fcc74cc8bc96dbac91d905f4ce1f5fd1e8/src/main/java/com/atlauncher/utils/Utils.java#L144>
