@@ -6,7 +6,7 @@ Ce logiciel permet de maintenir les mods [Fabric](https://fabricmc.net/) des jou
 
 **Necessite Java 14 au minimun**
 
-Le programme est à exécuter dans avec le dossier config dans le meme repertoire.
+Le programme est à exécuter avec le dossier config dans le meme repertoire.
 
 ### Configuration
 
@@ -20,6 +20,7 @@ Avant de le distribuer aux joueurs, veuillez configurer le fichier configApp.pro
 4. Messages d'erreurs plus explicite
 5. Java inclus dans la release
 6. Ajout remind me
+7. Amelioration de la commande de lancement de MC
 
 #### Sources from part of the code
 

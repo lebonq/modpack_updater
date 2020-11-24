@@ -37,7 +37,7 @@ public class AppController implements Initializable {// Permet de mettre a jour 
     private Task<Integer> aUpdateTask;
     private Minecraft aMinecraftClient;
     private int aNbRows;
-    final private int aNbColumns = 3;
+    final private int aNbColumns = 10;//Inutile ?
     final private int aGap = 5;
 
     @FXML

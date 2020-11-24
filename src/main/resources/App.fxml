@@ -13,7 +13,7 @@
 
 <AnchorPane minHeight="600.0" minWidth="550.0" prefHeight="800.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ScrollPane layoutX="26.0" layoutY="91.0" prefHeight="535.0" prefWidth="498.0" AnchorPane.bottomAnchor="174.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="91.0">
+      <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="26.0" layoutY="91.0" prefHeight="535.0" prefWidth="498.0" AnchorPane.bottomAnchor="174.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="91.0">
          <content>
             <TilePane fx:id="aListMods" alignment="CENTER" prefHeight="533.0" prefWidth="483.0" />
          </content>
