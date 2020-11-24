@@ -24,5 +24,7 @@ Avant de le distribuer aux joueurs, veuillez configurer le fichier configApp.pro
 #### Sources from part of the code
 
 To get access token, UUID and display name from username, password inspired by <https://www.spigotmc.org/threads/how-to-get-api-mojang-minecraft-client-access-token.159019/>
+
 SHA1 calculator from  <https://stackoverflow.com/questions/6293713/java-how-to-create-sha-1-for-a-file>
+
 Name of librarie to path <https://github.com/ATLauncher/ATLauncher/blob/5a90f8fcc74cc8bc96dbac91d905f4ce1f5fd1e8/src/main/java/com/atlauncher/utils/Utils.java#L144>
