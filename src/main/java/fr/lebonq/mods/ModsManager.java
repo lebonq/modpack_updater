@@ -34,7 +34,7 @@ public class ModsManager {
         for (int i = 0; i < pListJars.length; i++) {
             File vJson = this.aFilesManager.extractFromJar(pListJars[i], "fabric.mod.json");// On recupre le fichier
                                                                                             // JSON
-            String[] vInfo = ModJsonManager.getModInfo(vJson); // On recupere les info dans le ficgier JSON
+            String[] vInfo = ModJsonManager.getModInfo(vJson); // On recupere les info dans le fichier JSON
             this.aModsList[i] = new Mod(pListJars[i], vInfo[0], vInfo[1],
                     this.aFilesManager.extractFromJar(pListJars[i], vInfo[2]), vInfo[3]);
             vJson.deleteOnExit();
@@ -49,8 +49,8 @@ public class ModsManager {
         for (int i = 0; i < this.aNumberOfMods; i++) {
             System.out.println(this.aModsList[i]);
         }
-        this.aController.setLittleUpdateLabel("Les mods prennent un espace totale de " + (int)this.aTotalSize + " Mo");
-        System.out.println("Les mods prennent un espace totale de " + (int)this.aTotalSize + " Mo");
+        this.aController.setLittleUpdateLabel("Les mods prennent un espace total de " + (int)this.aTotalSize + " Mo");
+        System.out.println("Les mods prennent un espace total de " + (int)this.aTotalSize + " Mo");
     }
 
     public int getNumberOfMods(){
@@ -68,7 +68,7 @@ public class ModsManager {
         while(i < vNbFiles){
             if(i == this.aNumberOfMods){//Si nous avons deja parcouru tout les mods locaux alors on telecharge tout les restes
                 while(i <= vNbFiles){
-                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, "mods/", pFiles[j][2].replaceAll(".json", ""),this.aController);
+                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, this.aFilesManager.getModFolder().getAbsolutePath()+"/", 0,true,this.aController);
                     this.aController.updateList();
                     i++;j++;
                 }
@@ -76,14 +76,14 @@ public class ModsManager {
             }
             if(!(this.aModsList[i].getName().equals(pFiles[j][0]))){//Si les noms sont differente c'est que le mods distant manque en local
                 if(IsContain.isContain(i, 0, pFiles, this.aModsList[i].getName())){
-                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, "mods/", pFiles[j][2].replaceAll(".json", ""),this.aController);
+                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, this.aFilesManager.getModFolder().getAbsolutePath() +"/", 0,true,this.aController);
                     this.aController.updateList();
                     //Ici les replaceAll permet de retirer le .json du path du fichier
                     j++;//on avance j mais pas i
                 }
                 else{
-                    this.aController.setLittleUpdateLabel("Suppression d'un mod obselete");
-                    System.out.println("Suppression d'un mod obselete");
+                    this.aController.setLittleUpdateLabel("Suppression d'un mod obsolete");
+                    System.out.println("Suppression d'un mod obsolete");
                     this.aModsList[i].getFile().delete();
                     i++;//On avance i car le mods doit etre supprimer
                 }
@@ -91,7 +91,7 @@ public class ModsManager {
             else{
                 if(!(this.aModsList[i].getVersion().equals(pFiles[j][1]))){//On compare les versions si differente on met a jour
                     this.aModsList[i].getFile().delete();
-                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, "mods/", pFiles[j][2].replaceAll(".json", ""),this.aController);
+                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false,  this.aFilesManager.getModFolder().getAbsolutePath() +"/", 0,true,this.aController);
                     this.aController.updateList();
                     i++;
                     j++;

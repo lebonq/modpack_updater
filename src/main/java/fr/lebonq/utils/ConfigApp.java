@@ -6,5 +6,6 @@ import org.aeonbits.owner.Config;
 public interface ConfigApp extends Config {
     String modpackClient();
     String modsJson();
+    String root();
     String name();//Le nom qui apparaitera sur l'application
 }

@@ -21,14 +21,14 @@ public class Downloader {
     /**
      *  * Permet de telecharger le fichier avec lurl passe en parametre
      * @param pUrl Url du fichier a dl
-     * @param pNomMod nom du mod pour seul but esthetique
+     * @param pName nom du mod pour seul but esthetique
      * @param pTemp pour dire si le fochier telecharger doit etre temporaire ou non
-     * @param pPath Effectif que si pTemp = false le chemin ou doit etre enregistre le fichier(doit etre cree au prealable)
-     * @param pFileName Effectif que si pTemp = false le nom du fichier a enregistrer
+     * @param pPath Effectif que si pTemp = false le chemin ou doit etre enregistre le fichier(doit etre cree au prealable) ave cun / a la fin
+     * @param pSize  = 0 si on ne connais pas a lavance la taille
      * @param pController Permet de communiquer avec l"ui
-     * @return le fichier telecharge
+     * @return File le fichier telecharge
      */
-    public static File downloadFile(String pUrl,String pNameMod,boolean pTemp,String pPath,String pFileName,AppController pController) {
+    public static File downloadFile(String pUrl,String pName,boolean pTemp,String pPath,int pSize,boolean pProgressBar,AppController pController) {
         System.out.println("Connexion..");
         File vDownloadedFile = null;
         
@@ -45,11 +45,15 @@ public class Downloader {
             if(pTemp){
                 vDownloadedFile = File.createTempFile(pUrl,".tmp");
             }else{
-                vDownloadedFile = new File(pPath + pFileName);
+                vDownloadedFile = new File(pPath + pUrl.substring(pUrl.lastIndexOf("/"))); // Permet de mettre le nom du fichier distant
+                System.out.println(pUrl);
+                System.out.println(vDownloadedFile.getAbsolutePath());
             }
 
             InputStream vWebFile = vEntity.getContent();//On recupere le corps du fichier
-            long vTotalSize = vEntity.getContentLength();
+            long vTotalSize;
+            if(pSize == 0) {vTotalSize = vEntity.getContentLength();}
+            else{vTotalSize = pSize;}
 
             try {
                 // On crée l'OutputStream vers la sortie
@@ -59,13 +63,13 @@ public class Downloader {
                     byte[] vBuf = new byte[1024];
                     int vLen;
                     long VLenC = 0;//En long car sinon on depasse la taille
-                    System.out.println("Telechargement de " + pNameMod);
-                    pController.setUpdateLabel("Telechargement de " + pNameMod);
+                    System.out.println("Telechargement de " + pName);
+                    pController.setUpdateLabel("Telechargement de " + pName);
                     while ( (vLen=vWebFile.read(vBuf)) > 0 ) {
                         vOutput.write(vBuf, 0, vLen);
                         VLenC+=vLen; //On ajoute la taille du buf lu
                         System.out.print(LoadingAnim.anim((VLenC*100l)/vTotalSize) + "\r");//ON affiche le pourcentage
-                        pController.setDownloadProgressbar((double)((VLenC*100l)/vTotalSize)/100);//On met a jour la progressbar
+                        if(pProgressBar) pController.setDownloadProgressbar((double)((VLenC*100l)/vTotalSize)/100);//On met a jour la progressbar
                     }
                     System.out.println("");
                 } finally {

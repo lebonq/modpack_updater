@@ -17,3 +17,7 @@ Avant de le distribuer aux joueurs, veuillez configurer le fichier configApp.pro
 1. Lancer Minecraft depuis le launcher
 2. Installer Minecraft et Fabric depuis le launcher
 3. Inserer directement le fichier server.dat avec l'adresse du server
+
+#### Credit
+
+To get access token from username, password and UUID https://www.spigotmc.org/threads/how-to-get-api-mojang-minecraft-client-access-token.159019/

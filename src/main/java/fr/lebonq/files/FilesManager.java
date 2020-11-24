@@ -1,9 +1,7 @@
 package fr.lebonq.files;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,19 +13,19 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+
+import fr.lebonq.minecraft.Minecraft;
 /**
  * Cette classe permet de gerer les fichiers des mods, notamment les .jar
  */
 public class FilesManager{
     private File aFolderMods;
-    private File aFileVersion;
 
     /**
      * Constructeur de notre gestionnaire de fichier
      */
-    public FilesManager() {
-        this.aFolderMods = new File("mods");
-        this.aFileVersion = new File("mods/.version.txt");
+    public FilesManager(Minecraft pMinecraft) {
+        this.aFolderMods = new File(pMinecraft.getClientFolder().getAbsolutePath() + "/mods");
         createMods();
     }
 
@@ -54,13 +52,6 @@ public class FilesManager{
         }
     }
 
-     /**
-     * Permet de savoir si le fichier .version existe
-     * @return boolean
-     */
-    public boolean checkIfVersionExists(){
-        return this.aFileVersion.exists();
-    }
     /**
      * Permet de savoir si le fichier est un .jar
      * @param pFile
@@ -125,25 +116,6 @@ public class FilesManager{
             }
         }
         return vRerturnFiles;
-    }
-
-    /**
-     * Permet de comparer le fichier version passe en parametre avec celui dans le dossier mods
-     * @param pFile2
-     * @return True si la version est la meme
-     * @throws Exception BufferedReader n'arrive pas a ouvrir le fichier
-     */
-    public boolean compareTxtVersion(File pFile2) throws Exception{
-        BufferedReader vBufferedReader1 = new BufferedReader(new FileReader(this.aFileVersion)); 
-        BufferedReader vBufferedReader2 = new BufferedReader(new FileReader(pFile2)); 
-
-        String vContent1String = vBufferedReader1.lines().findFirst().get();
-        String vContent2String = vBufferedReader2.lines().findFirst().get();
-
-        boolean vReturn = vContent1String.equals(vContent2String);
-        vBufferedReader1.close();
-        vBufferedReader2.close();
-        return vReturn;
     }
 
     /**
@@ -228,5 +200,9 @@ public class FilesManager{
 
         }
         return vReturn;
+    }
+
+    public File getModFolder(){
+        return this.aFolderMods;
     }
 }
