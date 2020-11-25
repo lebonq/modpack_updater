@@ -21,6 +21,9 @@ Avant de le distribuer aux joueurs, veuillez configurer le fichier configApp.pro
 5. Java inclus dans la release
 6. Ajout remind me
 7. Amelioration de la commande de lancement de MC
+8. ~~Suppression du dossier bin~~
+9. Afficher la console MC
+10. Gestion des screens
 
 #### Sources from part of the code
 

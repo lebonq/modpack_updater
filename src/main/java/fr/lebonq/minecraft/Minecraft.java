@@ -169,6 +169,7 @@ public class Minecraft {
             BufferedReader processOutputReader = new BufferedReader(new InputStreamReader(this.aMcProcess.getInputStream()));
             String readLine;
             this.aController.setUpdateLabel("Minecraft est lance");
+            //On rentre dans la boucle du jeu
             while ((readLine = processOutputReader.readLine()) != null)
             {
                 System.out.println(readLine + System.lineSeparator());
@@ -176,8 +177,20 @@ public class Minecraft {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        //this.aBinFolder.delete();
+        }//Si on ressort le jeu est stoppe
+        
+        /*//On suppr le dossier bin
+        File vBinToDelete =  new File(this.aClientFolder.getAbsolutePath() + "/bin/");
+        
+        File[] vListFilesInBinToDelete = vBinToDelete.listFiles();
+
+        for (File file : vListFilesInBinToDelete) {
+            file.delete();
+        }*/
+        //Permet de supprimer tout le dossier bin lorsque le jeu s'arrete
+        File[] vToBeDelete = this.aBinFolder.listFiles();
+        deleteBinForThisInstance(vToBeDelete);
+        
     }
 
     private void downloadAssets(){
@@ -189,13 +202,25 @@ public class Minecraft {
             asset.createFolderDownload(this.aAssetsFolder.getAbsolutePath() + "/objects/", this.aController);
         }
     }
-
+    /**
+     * permet de se connecter au serveur de mojang et de verifier le compte
+     * @throws Exception
+     */
     public void login() throws Exception{
         String[] vResponse = new String[3];
         vResponse = Auth.authenticate(this.aUsername, this.aPassword);
         this.aUsernameMc = vResponse[2];
         this.aUUID = vResponse[1];
         this.aAccesToken =vResponse[0];
+    }
+
+    private void deleteBinForThisInstance(File[] pFiles){
+        for (File file : pFiles) {
+            if(file.isDirectory()){
+                deleteBinForThisInstance(file.listFiles());
+            }
+            file.delete();
+        }
     }
    
     public File getClientFolder(){
