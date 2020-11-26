@@ -98,12 +98,7 @@ public class Minecraft {
             e.printStackTrace();
         }
 
-        try {
-            this.aReminder = new Reminder(this.aClientFolder);
-        } catch (FileNotFoundException e) {
-            System.out.println("Pas de reminder premiere fois que le launcher est lance");
-            e.printStackTrace();
-        }
+        this.aReminder = new Reminder(this.aClientFolder);
         if(this.aReminder.hasReminder()){
             loadReminder();
             if(this.aReminder.checkSaved() && !(this.aReminder.tokenExpires())){//Si les donn2es sont bonne on les utilise

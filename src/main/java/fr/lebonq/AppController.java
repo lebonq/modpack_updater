@@ -2,6 +2,7 @@ package fr.lebonq;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -30,7 +31,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 
-
 public class AppController implements Initializable {// Permet de mettre a jour certain item a linisiatliation
     private FilesManager aFilesManager;
     private ModsManager aModsManager;
@@ -38,7 +38,7 @@ public class AppController implements Initializable {// Permet de mettre a jour 
     private Task<Integer> aUpdateTask;
     private Minecraft aMinecraftClient;
     private int aNbRows;
-    final private int aNbColumns = 10;//Inutile ?
+    final private int aNbColumns = 10;// Inutile ?
     final private int aGap = 5;
 
     @FXML
@@ -143,12 +143,15 @@ public class AppController implements Initializable {// Permet de mettre a jour 
         vPane.getChildren().add(vName);
 
         ImageView vImage = null;
+        FileInputStream vInput = null;
         try {
-            vImage = new ImageView(new Image(new FileInputStream(this.aModsManager.getMods()[pI].getIconInJar())));// Son
-                                                                                                                   // logo
-        } catch (FileNotFoundException e) {
+            vInput = new FileInputStream(this.aModsManager.getMods()[pI].getIconInJar());
+            vImage = new ImageView(new Image(vInput));// Son logo
+            vInput.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        
         vImage.setFitHeight(vImageScale);
         vImage.setFitWidth(vImageScale);
         vImage.setLayoutX((vWidth - vImageScale) / 2);
@@ -250,8 +253,10 @@ public class AppController implements Initializable {// Permet de mettre a jour 
             @Override
             public Integer call() throws Exception {
                 Platform.runLater(() -> aUpdateButton.setDisable(true));//On empeche les autres interaction avec le bouton pour lancer que 1 thread de maj
+                Platform.runLater(() -> aRemindMe.setDisable(true));
                 update();
                 Platform.runLater(() -> aUpdateButton.setDisable(false));
+                Platform.runLater(() -> aRemindMe.setDisable(false));
                 return 0;
               }
             };
@@ -270,11 +275,6 @@ public class AppController implements Initializable {// Permet de mettre a jour 
         Platform.runLater(() -> this.aListMods.getChildren().clear());
         Platform.runLater(() -> createElements());
         this.aModsManager.printModList();
-    }
-
-    @FXML
-    public void remindMe(){
-        
     }
 
     /**
