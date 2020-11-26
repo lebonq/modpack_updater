@@ -18,9 +18,9 @@
             <TilePane fx:id="aListMods" alignment="CENTER" prefHeight="533.0" prefWidth="483.0" />
          </content>
       </ScrollPane>
-      <TextField fx:id="aEmail" layoutX="173.0" layoutY="690.0" onKeyTyped="#getFields" prefHeight="25.0" prefWidth="212.0" promptText="Adresse email" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="165.0" />
-      <PasswordField fx:id="aPassword" layoutX="173.0" layoutY="722.0" onKeyTyped="#getFields" prefHeight="25.0" prefWidth="212.0" promptText="Mot de passe" AnchorPane.bottomAnchor="53.0" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="165.0" />
-      <Button fx:id="aUpdateButton" alignment="CENTER" contentDisplay="CENTER" layoutX="173.0" layoutY="756.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#updateTaskLaunch" prefHeight="30.0" prefWidth="212.0" text="Jouer" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="165.0" />
+      <TextField fx:id="aEmail" layoutX="173.0" layoutY="690.0" maxHeight="50.0" maxWidth="300.0" onKeyTyped="#getFields" prefHeight="25.0" prefWidth="212.0" promptText="Adresse email" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="165.0" />
+      <PasswordField fx:id="aPassword" layoutX="173.0" layoutY="722.0" maxHeight="50.0" maxWidth="300.0" onKeyTyped="#getFields" prefHeight="25.0" prefWidth="212.0" promptText="Mot de passe" AnchorPane.bottomAnchor="53.0" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="165.0" />
+      <Button fx:id="aUpdateButton" alignment="CENTER" contentDisplay="CENTER" layoutX="173.0" layoutY="756.0" maxHeight="60.0" maxWidth="300.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#updateTaskLaunch" prefHeight="30.0" prefWidth="212.0" text="Jouer" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="165.0" />
       <ProgressBar fx:id="aDownloadProgress" layoutX="26.0" layoutY="655.0" prefHeight="18.0" prefWidth="548.0" progress="0.0" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0" />
       <Label fx:id="aUpdateLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" layoutY="628.0" prefHeight="17.0" prefWidth="548.0" text="Cliquez pour jouer" AnchorPane.bottomAnchor="145.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="26.0">
          <font>
@@ -42,11 +42,6 @@
             <Font size="10.0" />
          </font>
       </Label>
-      <Button fx:id="aUpdateListButton" layoutX="476.0" layoutY="68.0" mnemonicParsing="false" onAction="#updateList" text="Actualiser" AnchorPane.rightAnchor="33.0" AnchorPane.topAnchor="68.0">
-         <font>
-            <Font size="7.0" />
-         </font>
-      </Button>
-      <CheckBox layoutX="393.0" layoutY="694.0" mnemonicParsing="false" text="Se souvenir de moi" AnchorPane.bottomAnchor="89.0" AnchorPane.rightAnchor="35.0" />
+      <CheckBox fx:id="aRemindMe" layoutX="393.0" layoutY="694.0" mnemonicParsing="false" text="Se souvenir de moi" AnchorPane.bottomAnchor="89.0" AnchorPane.rightAnchor="35.0" />
    </children>
 </AnchorPane>

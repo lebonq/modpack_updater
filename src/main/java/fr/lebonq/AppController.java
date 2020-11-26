@@ -20,6 +20,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressBar;
@@ -50,9 +51,6 @@ public class AppController implements Initializable {// Permet de mettre a jour 
     private Button aUpdateButton;
 
     @FXML
-    private Button aUpdateListButton;
-
-    @FXML
     private Label aVersionLabel;
     private String aVersionString;
 
@@ -74,6 +72,9 @@ public class AppController implements Initializable {// Permet de mettre a jour 
 
     @FXML
     private PasswordField aPassword;
+
+    @FXML
+    private CheckBox aRemindMe;
 
     public AppController(String pVersion) throws Exception {
         this.aServerConfig = ConfigFactory.create(ConfigApp.class);
@@ -167,9 +168,7 @@ public class AppController implements Initializable {// Permet de mettre a jour 
         vPane.getChildren().add(vDescription);
 
         NumberFormat vNumberFormat = new DecimalFormat("0.###");// Permet d'arrondir
-        Label vSize = new Label("" + vNumberFormat.format(this.aModsManager.getMods()[pI].getSize()) + " Mo");// Sa
-                                                                                                              // taille
-                                                                                                              // en MO
+        Label vSize = new Label("" + vNumberFormat.format(this.aModsManager.getMods()[pI].getSize()) + " Mo");// Sa taille en MO
         vSize.setMaxWidth(vWidth);
         vSize.setLayoutY(14);
         vPane.getChildren().add(vSize);
@@ -195,7 +194,7 @@ public class AppController implements Initializable {// Permet de mettre a jour 
     public void update() {
         stateFields(true);
         try {
-            this.aMinecraftClient.login();
+            this.aMinecraftClient.login(this.aRemindMe.isSelected());
         } catch (Exception e1) {
             setUpdateLabel("Les identifiants sont erronés");
             e1.printStackTrace();
@@ -250,10 +249,8 @@ public class AppController implements Initializable {// Permet de mettre a jour 
         this.aUpdateTask = new Task<Integer>() {
             @Override
             public Integer call() throws Exception {
-                Platform.runLater(() -> aUpdateListButton.setDisable(true));
                 Platform.runLater(() -> aUpdateButton.setDisable(true));//On empeche les autres interaction avec le bouton pour lancer que 1 thread de maj
                 update();
-                Platform.runLater(() -> aUpdateListButton.setDisable(false));
                 Platform.runLater(() -> aUpdateButton.setDisable(false));
                 return 0;
               }
@@ -263,7 +260,7 @@ public class AppController implements Initializable {// Permet de mettre a jour 
           th.start();
     }
 
-        /**
+    /**
      * On met a voir l'affichage de la liste de mod
      */
     @FXML
@@ -273,6 +270,11 @@ public class AppController implements Initializable {// Permet de mettre a jour 
         Platform.runLater(() -> this.aListMods.getChildren().clear());
         Platform.runLater(() -> createElements());
         this.aModsManager.printModList();
+    }
+
+    @FXML
+    public void remindMe(){
+        
     }
 
     /**
@@ -295,6 +297,15 @@ public class AppController implements Initializable {// Permet de mettre a jour 
     public void stateFields(boolean pState){
         Platform.runLater(() -> this.aEmail.setDisable(pState));
         Platform.runLater(() -> this.aPassword.setDisable(pState));
+    }
+
+    public void fillEmailPassword(String pEmail){
+        Platform.runLater(() -> this.aEmail.setText(pEmail));
+        Platform.runLater(() -> this.aPassword.setText("DatPassworsBro"));
+    }
+
+    public void checkRemind(boolean pCheck){
+        Platform.runLater(() -> this.aRemindMe.setSelected(pCheck));
     }
 
     @FXML

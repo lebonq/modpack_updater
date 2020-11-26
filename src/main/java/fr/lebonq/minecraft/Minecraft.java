@@ -13,6 +13,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import fr.lebonq.AppController;
 import fr.lebonq.minecraft.Account.Auth;
+import fr.lebonq.minecraft.Account.Reminder;
 import fr.lebonq.minecraft.assets.Asset;
 import fr.lebonq.minecraft.assets.AssetsManager;
 import fr.lebonq.minecraft.launch.Args;
@@ -38,6 +39,7 @@ public class Minecraft {
     private Args aArgs;
     private Process aMcProcess;
     private Fabric aFabric;
+    private Reminder aReminder;
 
     // Compte
     private String aUsernameMc;
@@ -94,6 +96,22 @@ public class Minecraft {
         } catch (Exception e) {
             this.aController.setUpdateLabel("Erreur donnees Fabricloader");
             e.printStackTrace();
+        }
+
+        try {
+            this.aReminder = new Reminder(this.aClientFolder);
+        } catch (FileNotFoundException e) {
+            System.out.println("Pas de reminder premiere fois que le launcher est lance");
+            e.printStackTrace();
+        }
+        if(this.aReminder.hasReminder()){
+            loadReminder();
+            if(this.aReminder.checkSaved() && !(this.aReminder.tokenExpires())){//Si les donn2es sont bonne on les utilise
+                this.aController.fillEmailPassword(this.aReminder.getSavedUsername());
+                this.aController.checkRemind(true);
+            }else{//Si les conditions avant en sont pas respecte alors le fichier est inutile on le supprime
+                System.out.println(this.aReminder.getLauncherSettings().delete());
+            }
         }
     }
 
@@ -179,14 +197,6 @@ public class Minecraft {
             e.printStackTrace();
         }//Si on ressort le jeu est stoppe
         
-        /*//On suppr le dossier bin
-        File vBinToDelete =  new File(this.aClientFolder.getAbsolutePath() + "/bin/");
-        
-        File[] vListFilesInBinToDelete = vBinToDelete.listFiles();
-
-        for (File file : vListFilesInBinToDelete) {
-            file.delete();
-        }*/
         //Permet de supprimer tout le dossier bin lorsque le jeu s'arrete
         File[] vToBeDelete = this.aBinFolder.listFiles();
         deleteBinForThisInstance(vToBeDelete);
@@ -204,14 +214,23 @@ public class Minecraft {
     }
     /**
      * permet de se connecter au serveur de mojang et de verifier le compte
+     * @return pRemind le boolean si luser veut rester co
      * @throws Exception
      */
-    public void login() throws Exception{
+    public void login(boolean pRemind) throws Exception{
+        if(pRemind){//remind est coche
+            if(this.aReminder.hasReminder()){//On verifie si la perosnne ne coche pas pour la premiere fois
+                if(this.aReminder.checkSaved()){
+                    return;
+                }
+            }
+        }
         String[] vResponse = new String[3];
         vResponse = Auth.authenticate(this.aUsername, this.aPassword);
         this.aUsernameMc = vResponse[2];
         this.aUUID = vResponse[1];
-        this.aAccesToken =vResponse[0];
+        this.aAccesToken = vResponse[0];
+        if(pRemind)this.aReminder.saveRemind(this.aAccesToken, this.aUUID, this.aUsernameMc, this.aUsername);
     }
 
     private void deleteBinForThisInstance(File[] pFiles){
@@ -221,6 +240,18 @@ public class Minecraft {
             }
             file.delete();
         }
+    }
+
+    public void loadReminder(){
+        try {
+            this.aReminder.loadRemind();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.aUsernameMc = this.aReminder.getSavedUsername();
+        this.aUUID = this.aReminder.getSavedUUID();
+        this.aAccesToken = this.aReminder.getSavedToken();
+        this.aUsernameMc = this.aReminder.getSavedDisplayName();
     }
    
     public File getClientFolder(){

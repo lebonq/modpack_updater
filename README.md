@@ -18,8 +18,8 @@ Avant de le distribuer aux joueurs, veuillez configurer le fichier configApp.pro
 2. ~~Installer Minecraft et Fabric depuis le launcher~~
 3. Inserer directement le fichier server.dat avec l'adresse du server
 4. Messages d'erreurs plus explicite
-5. Java inclus dans la release
-6. Ajout remind me
+5. ~~Java inclus dans la release~~
+6. ~~Ajout remind me~~
 7. Amelioration de la commande de lancement de MC
 8. ~~Suppression du dossier bin~~
 9. Afficher la console MC

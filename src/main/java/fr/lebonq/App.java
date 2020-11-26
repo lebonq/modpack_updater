@@ -23,7 +23,6 @@ public class App extends Application {
         InputStream vFXMLFile = getClass().getClassLoader().getResourceAsStream("App.fxml");
         Parent vRoot = vLoader.load(vFXMLFile);
 
-        System.out.print(vRoot);
         Scene vScene = new Scene(vRoot);
         pStage.setTitle("Modpack_Updater");
         pStage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("assets/icon.png")));

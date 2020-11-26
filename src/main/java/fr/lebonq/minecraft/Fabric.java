@@ -30,7 +30,7 @@ public class Fabric {
     public void setFabricJson(File pFile) throws Exception{
         this.aJsonFile = pFile;
         setVersion();
-        System.out.println(this.aVersionFabric);
+        System.out.println("On utilisera la version " + this.aVersionFabric + " de fabric");
     }
 
     private void setVersion(){
