@@ -100,14 +100,10 @@ public class Minecraft {
         }
 
         this.aReminder = new Reminder(this.aClientFolder);
-        if(this.aReminder.hasReminder()){
+        if(this.aReminder.hasReminder()){//Si il y a un reminder on le charge
             loadReminder();
-            if(this.aReminder.checkSaved() && !(this.aReminder.tokenExpires())){//Si les donn2es sont bonne on les utilise
-                this.aController.fillEmailPassword(this.aReminder.getSavedUsername());
-                this.aController.checkRemind(true);
-            }else{//Si les conditions avant en sont pas respecte alors le fichier est inutile on le supprime
-                System.out.println(this.aReminder.getLauncherSettings().delete());
-            }
+            this.aController.fillEmailPassword(this.aReminder.getSavedUsername());
+            this.aController.checkRemind(true);
         }
     }
 
@@ -140,7 +136,7 @@ public class Minecraft {
         String vAssetsIndexUrl = AssetsManager.urlAssetsIndex(this.aClientJsonCurrentVersion);
         
         this.aAssetsIndexFile = Downloader.downloadFile(vAssetsIndexUrl, "Assets Index", false, this.aAssetsFolder.getAbsolutePath() + "/indexes/", 0,true, this.aController);
-        downloadAssets();
+        //downloadAssets();
 
 
         //Dl libraries
@@ -214,38 +210,27 @@ public class Minecraft {
      * @throws Exception
      */
     public void login(boolean pRemind) throws Exception{
-        if(pRemind){//remind est coche
-            if(this.aReminder.hasReminder()){//On verifie si la perosnne ne coche pas pour la premiere fois
-                if(this.aReminder.checkSaved()){
-                    return;
-                }
-            }
-        }
-        if(this.aReminder.hasReminder()){
-            String[] vResponse = new String[4];
-            vResponse = Auth.authenticate(this.aUsername, this.aPassword, this.aReminder.getSavedClientToken());
-            this.aUsernameMc = vResponse[2];
-            this.aUUID = vResponse[1];
-            this.aAccesToken = vResponse[0];
-            this.aClientToken = vResponse[3];
-            if(pRemind){
-                this.aReminder.saveRemind(this.aAccesToken, this.aUUID, this.aUsernameMc, this.aUsername,this.aClientToken);
-                return;
-            }else{
-                this.aReminder.getLauncherSettings().delete();
+        if(pRemind && this.aReminder.hasReminder()){
+            if(Auth.validate(this.aAccesToken, this.aClientToken)){
+                System.out.print("Access token still valid.");
                 return;
             }
-        }
+            else{
+                this.aAccesToken = Auth.refresh(this.aAccesToken, this.aClientToken);
+                System.out.print("Access token still need to be refresh.");
+                this.aReminder.saveRemind(this.aAccesToken, this.aUUID, this.aUsernameMc, this.aUsername, this.aClientToken);
+                return;
+            }
+        }else{
         String[] vResponse = new String[4];
         vResponse = Auth.authenticate(this.aUsername, this.aPassword, null);
+        System.out.print("Get access token.");
         this.aUsernameMc = vResponse[2];
         this.aUUID = vResponse[1];
         this.aAccesToken = vResponse[0];
         this.aClientToken = vResponse[3];
-        if(pRemind){
-            this.aReminder.saveRemind(this.aAccesToken, this.aUUID, this.aUsernameMc, this.aUsername,this.aClientToken);
-            return;
         }
+        if(pRemind)this.aReminder.saveRemind(this.aAccesToken, this.aUUID, this.aUsernameMc, this.aUsername, this.aClientToken);
     }
 
     private void deleteBinForThisInstance(File[] pFiles){
@@ -263,10 +248,11 @@ public class Minecraft {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.aUsernameMc = this.aReminder.getSavedUsername();
+        this.aUsername = this.aReminder.getSavedUsername();
         this.aUUID = this.aReminder.getSavedUUID();
-        //this.aAccesToken = this.aReminder.getSavedToken();
+        this.aAccesToken = this.aReminder.getSavedToken();
         this.aUsernameMc = this.aReminder.getSavedDisplayName();
+        this.aClientToken = this.aReminder.getSavedClientToken();
     }
    
     public File getClientFolder(){

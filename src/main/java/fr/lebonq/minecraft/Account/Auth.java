@@ -14,7 +14,8 @@ import com.google.gson.JsonParser;
 /**
  * recupere les informations pour se login
  * 
- * Highly inspired by :  https://www.spigotmc.org/threads/how-to-get-api-mojang-minecraft-client-access-token.159019/
+ * Highly inspired by :
+ * https://www.spigotmc.org/threads/how-to-get-api-mojang-minecraft-client-access-token.159019/
  */
 public class Auth {
     private final static String authserver = "https://authserver.mojang.com";
@@ -22,8 +23,10 @@ public class Auth {
     public static String[] authenticate(String username, String password, String pClientToken) throws Exception {
 
         String genClientToken = null;
-        if(pClientToken == null)genClientToken = UUID.randomUUID().toString();//on cree un uuid random
-        else genClientToken = pClientToken;
+        if (pClientToken == null)
+            genClientToken = UUID.randomUUID().toString();// on cree un uuid random
+        else
+            genClientToken = pClientToken;
 
         // Setting up json POST request
         String payload = "{\"agent\": {\"name\": \"Minecraft\",\"version\": 1},\"username\": \"" + username
@@ -32,8 +35,8 @@ public class Auth {
         String output = postReadURL(payload, new URL(authserver + "/authenticate"));
 
         System.out.println(output);
-        
-        //On recupere les donnees
+
+        // On recupere les donnees
         JsonParser vParser = new JsonParser();
         JsonObject vBody = (JsonObject) vParser.parse(output);
         String vAccesToken = vBody.get("accessToken").getAsString();
@@ -41,12 +44,32 @@ public class Auth {
         String vUUID = vBody.get("selectedProfile").getAsJsonObject().get("id").getAsString();
         String vDisplayName = vBody.get("selectedProfile").getAsJsonObject().get("name").getAsString();
 
-        String[] vReturn = {vAccesToken,vUUID,vDisplayName,vClientToken};
+        String[] vReturn = { vAccesToken, vUUID, vDisplayName, vClientToken };
         for (String string : vReturn) {
             System.out.println(string);
         }
 
         return vReturn;
+    }
+
+    public static boolean validate(String pAccessToken, String pClientToken) {
+        String payload = "{\"accessToken\": \"" + pAccessToken + "\",\"clientToken\": \"" + pClientToken + "\"}";
+
+        try {
+            String output = postReadURL(payload, new URL(authserver + "/validate"));
+            System.out.println(output);
+            if(output.isEmpty()) return true;
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
+    public static String refresh(String pAccessToken, String pClientToken) throws Exception{
+        String payload = "{\"accessToken\": \"" + pAccessToken + "\",\"clientToken\": \"" + pClientToken + "\"}";
+        String response = postReadURL(payload, new URL(authserver + "/refresh"));
+        System.out.println(response);
+        return response;
     }
 
     private static String postReadURL(String payload, URL url) throws Exception {

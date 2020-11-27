@@ -26,7 +26,7 @@ public class Reminder {
     private String aSavedDisplayName;
     private String aSavedUUID;
     private String aSavedUsername;
-    private String aSaveClientToken;
+    private String aSavedClientToken;
     private File aSettingsFile;
 
     public Reminder(File pClientFolder) {
@@ -74,7 +74,7 @@ public class Reminder {
         vSettings.put("UUID", pUUID);
         vSettings.put("displayName", pUsernameMC);
         vSettings.put("username", pUsername);
-        vSettings.put("clientToken", pUsername);
+        vSettings.put("clientToken", pClientToken);
 
         Writer vWriter = null;
         try {
@@ -103,7 +103,7 @@ public class Reminder {
         this.aSavedDisplayName = vParser.parse(vBodyJson).getAsJsonObject().get("displayName").getAsString();
         this.aSavedUUID = vParser.parse(vBodyJson).getAsJsonObject().get("UUID").getAsString();
         this.aSavedUsername = vParser.parse(vBodyJson).getAsJsonObject().get("username").getAsString();
-        this.aSaveClientToken = vParser.parse(vBodyJson).getAsJsonObject().get("clientToken").getAsString();
+        this.aSavedClientToken = vParser.parse(vBodyJson).getAsJsonObject().get("clientToken").getAsString();
     }
     
     /**
@@ -123,7 +123,7 @@ public class Reminder {
     }
 
     public String getSavedClientToken() {
-        return this.aSavedUUID;
+        return this.aSavedClientToken;
     }
 
     public String getSavedUsername() {
@@ -132,6 +132,10 @@ public class Reminder {
 
     public File getLauncherSettings(){
         return this.aSettingsFile;
+    }
+
+    public String getSavedToken(){
+        return this.aSavedToken;
     }
 
     /**
