@@ -26,6 +26,7 @@ public class Reminder {
     private String aSavedDisplayName;
     private String aSavedUUID;
     private String aSavedUsername;
+    private String aSaveClientToken;
     private File aSettingsFile;
 
     public Reminder(File pClientFolder) {
@@ -67,12 +68,13 @@ public class Reminder {
      * @param pUsernameMC
      * @param pUsername
      */
-    public void saveRemind(String pToken,String pUUID,String pUsernameMC,String pUsername){
+    public void saveRemind(String pToken,String pUUID,String pUsernameMC,String pUsername,String pClientToken){
         Map<String, String> vSettings = new HashMap<>();
         vSettings.put("accessToken", pToken);
         vSettings.put("UUID", pUUID);
         vSettings.put("displayName", pUsernameMC);
         vSettings.put("username", pUsername);
+        vSettings.put("clientToken", pUsername);
 
         Writer vWriter = null;
         try {
@@ -101,6 +103,7 @@ public class Reminder {
         this.aSavedDisplayName = vParser.parse(vBodyJson).getAsJsonObject().get("displayName").getAsString();
         this.aSavedUUID = vParser.parse(vBodyJson).getAsJsonObject().get("UUID").getAsString();
         this.aSavedUsername = vParser.parse(vBodyJson).getAsJsonObject().get("username").getAsString();
+        this.aSaveClientToken = vParser.parse(vBodyJson).getAsJsonObject().get("clientToken").getAsString();
     }
     
     /**
@@ -111,15 +114,15 @@ public class Reminder {
         return this.aTokenExpires;
     }
 
-    public String getSavedToken() {
-        return this.aSavedToken;
-    }
-
     public String getSavedDisplayName() {
         return this.aSavedDisplayName;
     }
 
     public String getSavedUUID() {
+        return this.aSavedUUID;
+    }
+
+    public String getSavedClientToken() {
         return this.aSavedUUID;
     }
 

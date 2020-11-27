@@ -47,6 +47,7 @@ public class Minecraft {
     private String aPassword;
     private String aUUID;
     private String aAccesToken;
+    private String aClientToken;
 
     public Minecraft(String pRoot, AppController pController) {
 
@@ -220,12 +221,31 @@ public class Minecraft {
                 }
             }
         }
-        String[] vResponse = new String[3];
-        vResponse = Auth.authenticate(this.aUsername, this.aPassword);
+        if(this.aReminder.hasReminder()){
+            String[] vResponse = new String[4];
+            vResponse = Auth.authenticate(this.aUsername, this.aPassword, this.aReminder.getSavedClientToken());
+            this.aUsernameMc = vResponse[2];
+            this.aUUID = vResponse[1];
+            this.aAccesToken = vResponse[0];
+            this.aClientToken = vResponse[3];
+            if(pRemind){
+                this.aReminder.saveRemind(this.aAccesToken, this.aUUID, this.aUsernameMc, this.aUsername,this.aClientToken);
+                return;
+            }else{
+                this.aReminder.getLauncherSettings().delete();
+                return;
+            }
+        }
+        String[] vResponse = new String[4];
+        vResponse = Auth.authenticate(this.aUsername, this.aPassword, null);
         this.aUsernameMc = vResponse[2];
         this.aUUID = vResponse[1];
         this.aAccesToken = vResponse[0];
-        if(pRemind)this.aReminder.saveRemind(this.aAccesToken, this.aUUID, this.aUsernameMc, this.aUsername);
+        this.aClientToken = vResponse[3];
+        if(pRemind){
+            this.aReminder.saveRemind(this.aAccesToken, this.aUUID, this.aUsernameMc, this.aUsername,this.aClientToken);
+            return;
+        }
     }
 
     private void deleteBinForThisInstance(File[] pFiles){
@@ -245,7 +265,7 @@ public class Minecraft {
         }
         this.aUsernameMc = this.aReminder.getSavedUsername();
         this.aUUID = this.aReminder.getSavedUUID();
-        this.aAccesToken = this.aReminder.getSavedToken();
+        //this.aAccesToken = this.aReminder.getSavedToken();
         this.aUsernameMc = this.aReminder.getSavedDisplayName();
     }
    

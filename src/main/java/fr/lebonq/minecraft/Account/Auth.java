@@ -19,9 +19,11 @@ import com.google.gson.JsonParser;
 public class Auth {
     private final static String authserver = "https://authserver.mojang.com";
 
-    public static String[] authenticate(String username, String password) throws Exception {
+    public static String[] authenticate(String username, String password, String pClientToken) throws Exception {
 
-        String genClientToken = UUID.randomUUID().toString();//on cree un uuid random
+        String genClientToken = null;
+        if(pClientToken == null)genClientToken = UUID.randomUUID().toString();//on cree un uuid random
+        else genClientToken = pClientToken;
 
         // Setting up json POST request
         String payload = "{\"agent\": {\"name\": \"Minecraft\",\"version\": 1},\"username\": \"" + username
@@ -35,10 +37,11 @@ public class Auth {
         JsonParser vParser = new JsonParser();
         JsonObject vBody = (JsonObject) vParser.parse(output);
         String vAccesToken = vBody.get("accessToken").getAsString();
+        String vClientToken = vBody.get("clientToken").getAsString();
         String vUUID = vBody.get("selectedProfile").getAsJsonObject().get("id").getAsString();
         String vDisplayName = vBody.get("selectedProfile").getAsJsonObject().get("name").getAsString();
 
-        String[] vReturn = {vAccesToken,vUUID,vDisplayName};
+        String[] vReturn = {vAccesToken,vUUID,vDisplayName,vClientToken};
         for (String string : vReturn) {
             System.out.println(string);
         }
