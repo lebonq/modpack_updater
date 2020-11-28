@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -52,12 +53,18 @@ public class Auth {
         return vReturn;
     }
 
+    /**
+     * Permet de valider l'access token cad peut etre lancer avec Minecraft
+     * @param pAccessToken
+     * @param pClientToken
+     * @return
+     */
     public static boolean validate(String pAccessToken, String pClientToken) {
         String payload = "{\"accessToken\": \"" + pAccessToken + "\",\"clientToken\": \"" + pClientToken + "\"}";
 
         try {
             String output = postReadURL(payload, new URL(authserver + "/validate"));
-            System.out.println(output);
+            //System.out.println(output);
             if(output.isEmpty()) return true;
         } catch (Exception e) {
             return false;
@@ -68,8 +75,11 @@ public class Auth {
     public static String refresh(String pAccessToken, String pClientToken) throws Exception{
         String payload = "{\"accessToken\": \"" + pAccessToken + "\",\"clientToken\": \"" + pClientToken + "\"}";
         String response = postReadURL(payload, new URL(authserver + "/refresh"));
-        System.out.println(response);
-        return response;
+        JsonParser vParser =  new JsonParser();
+        String vToken = vParser.parse(response).getAsJsonObject().get("accessToken").getAsString();
+        
+        //System.out.println(vToken);
+        return vToken;
     }
 
     private static String postReadURL(String payload, URL url) throws Exception {
