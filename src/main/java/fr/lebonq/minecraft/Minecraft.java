@@ -100,7 +100,7 @@ public class Minecraft {
         }
 
         this.aReminder = new Reminder(this.aClientFolder);
-        if(this.aReminder.hasReminder()){//Si il y a un reminder on le charge
+        if(this.aReminder.hasReminder() && !(this.aReminder.tokenExpires())){//Si il y a un reminder on le charge
             loadReminder();
             this.aController.fillEmailPassword(this.aReminder.getSavedUsername());
             this.aController.checkRemind(true);
@@ -136,7 +136,7 @@ public class Minecraft {
         String vAssetsIndexUrl = AssetsManager.urlAssetsIndex(this.aClientJsonCurrentVersion);
         
         this.aAssetsIndexFile = Downloader.downloadFile(vAssetsIndexUrl, "Assets Index", false, this.aAssetsFolder.getAbsolutePath() + "/indexes/", 0,true, this.aController);
-        //downloadAssets();
+        downloadAssets();
 
 
         //Dl libraries
@@ -210,7 +210,7 @@ public class Minecraft {
      * @throws Exception
      */
     public void login(boolean pRemind) throws Exception{
-        if(pRemind && this.aReminder.hasReminder()){
+        if(pRemind && this.aReminder.hasReminder() && !(this.aReminder.tokenExpires())){
             if(Auth.validate(this.aAccesToken, this.aClientToken)){
                 System.out.print("Access token still valid.");
                 return;
