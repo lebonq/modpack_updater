@@ -24,6 +24,7 @@ Avant de le distribuer aux joueurs, veuillez configurer le fichier configApp.pro
 8. ~~Suppression du dossier bin~~
 9. Afficher la console MC
 10. Gestion des screens
+11. Netoyage du code et plusieurs ameliorations
 
 #### Sources from part of the code
 
