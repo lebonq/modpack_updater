@@ -1,6 +1,11 @@
 package fr.lebonq.utils;
 
 public final class OsUtils {
+
+    private OsUtils(){
+        throw new IllegalStateException("Utility class");
+    }
+
     private static String getOsName(){
         return System.getProperty("os.name").toLowerCase();
     }

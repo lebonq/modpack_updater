@@ -3,8 +3,9 @@ package fr.lebonq.minecraft.libraries;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -13,9 +14,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import org.apache.logging.log4j.Level;
+
+import fr.lebonq.AppController;
 import fr.lebonq.utils.IdentifierToPath;
 
 public class LibrariesManager {
+
+    private LibrariesManager() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * Permet de lister toute les libraries necesssaires
@@ -23,18 +31,17 @@ public class LibrariesManager {
      * @param pFileFabric le clientfabric json
      * @return Une hasset avec tout les objets Librarie necessaire
      */
-    public static Vector<Librarie> downloadLibraries(File pFileMc,File pFileFabric) {
+    public static List<Librarie> downloadLibraries(File pFileMc,File pFileFabric) {
         //For Fabric libraries
         JsonParser vParserFabric = new JsonParser();
 
         JsonObject vFileFabric = null;
-        Vector<Librarie> vLibrarieVector = new Vector<Librarie>();//On renvoie un hashset pour pouvoir gerer les natives etc
+        List<Librarie> vLibrarieVector = new ArrayList<>();//On renvoie un hashset pour pouvoir gerer les natives etc
         try {
             vFileFabric = (JsonObject) vParserFabric.parse(new FileReader(pFileFabric));
         } catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
             e.printStackTrace();
         }
-        //JsonElement vLatest = vFileFabric.get(0);
         JsonArray vLibrariesFabric = vFileFabric.getAsJsonObject().get("libraries").getAsJsonArray();
         
         for (JsonElement jsonElement : vLibrariesFabric) {
@@ -44,7 +51,7 @@ public class LibrariesManager {
             Librarie vReturn = new Librarie(vPath, "", 0, vUrl,false);
             vLibrarieVector.add(vReturn);
         }
-        System.out.println(vLibrariesFabric.toString());
+        AppController.LOGGER.log(Level.INFO,"{}", vLibrariesFabric);
         
         //For mc libraries
         JsonParser vParser = new JsonParser();
@@ -76,7 +83,6 @@ public class LibrariesManager {
                     Librarie vReturn = new Librarie(vPath, vSha1, vSize, vUrl,true);
                     vLibrarieVector.add(vReturn);
 
-                    //System.out.println(vObjArtifact.get("url").getAsString());
                     i++;
                 }//if
                 else{//Sinon c'est que c'est une bibliotheque natives
@@ -107,9 +113,6 @@ public class LibrariesManager {
                             break;
                         }
                     }
-                    
-                    //System.out.println(vObjArtifact.get("url").getAsString());
-                    //System.out.println(vElmClassifiers.getAsJsonObject().get("natives-windows").getAsJsonObject().get("url").getAsString() );
                     i++;
                 }//else
 
@@ -128,7 +131,6 @@ public class LibrariesManager {
                         Librarie vReturn = new Librarie(vPath, vSha1, vSize, vUrl,true);
                         vLibrarieVector.add(vReturn);
 
-                        //System.out.println(vObjArtifact.get("url").getAsString());
                         i++;
                             
                     }//if
@@ -160,8 +162,6 @@ public class LibrariesManager {
                                     break;
                             }
                         }
-                        //System.out.println(vObjArtifact.get("url").getAsString());
-                        //System.out.println(vElmClassifiers.getAsJsonObject().get("natives-windows").getAsJsonObject().get("url").getAsString() );
                         i++;
                     }//else
                 }//if
@@ -170,7 +170,7 @@ public class LibrariesManager {
                 }//else
             }//else
         }//for
-        System.out.println("il y a " + i + " libraries a dl");
+       AppController.LOGGER.log(Level.INFO,"Il y a {} libraries a telecharger", i);
 
         return vLibrarieVector;
     }//download

@@ -2,6 +2,8 @@ package fr.lebonq.mods;
 
 import java.io.File;
 
+import org.apache.logging.log4j.Level;
+
 import fr.lebonq.AppController;
 import fr.lebonq.files.FilesManager;
 import fr.lebonq.remote.Downloader;
@@ -47,10 +49,10 @@ public class ModsManager {
      */
     public void printModList() {
         for (int i = 0; i < this.aNumberOfMods; i++) {
-            System.out.println(this.aModsList[i]);
+            AppController.LOGGER.log(Level.INFO,this.aModsList[i]);
         }
         this.aController.setLittleUpdateLabel("Les mods prennent un espace total de " + (int)this.aTotalSize + " Mo");
-        System.out.println("Les mods prennent un espace total de " + (int)this.aTotalSize + " Mo");
+        AppController.LOGGER.log(Level.INFO,"Les mods prennent un espace total de {} Mo",(int)this.aTotalSize);
     }
 
     public int getNumberOfMods(){
@@ -83,14 +85,18 @@ public class ModsManager {
                 }
                 else{
                     this.aController.setLittleUpdateLabel("Suppression d'un mod obsolete");
-                    System.out.println("Suppression d'un mod obsolete");
-                    this.aModsList[i].getFile().delete();
+                    AppController.LOGGER.log(Level.INFO,"Suppression d un mod obsolete");
+                    if(!(this.aModsList[i].getFile().delete())){
+                        //TO-DO
+                    }
                     i++;//On avance i car le mods doit etre supprimer
                 }
             }
             else{
                 if(!(this.aModsList[i].getVersion().equals(pFiles[j][1]))){//On compare les versions si differente on met a jour
-                    this.aModsList[i].getFile().delete();
+                    if(!(this.aModsList[i].getFile().delete())){
+                        //TO-DO
+                    }
                     Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false,  this.aFilesManager.getModFolder().getAbsolutePath() +"/", 0,true,this.aController);
                     this.aController.updateList();
                     i++;

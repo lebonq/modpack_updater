@@ -1,16 +1,21 @@
-package fr.lebonq.minecraft.Account;
+package fr.lebonq.minecraft.account;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import org.apache.commons.codec.Charsets;
+import org.apache.logging.log4j.Level;
+
+import fr.lebonq.AppController;
 
 /**
  * recupere les informations pour se login
@@ -19,9 +24,13 @@ import com.google.gson.JsonParser;
  * https://www.spigotmc.org/threads/how-to-get-api-mojang-minecraft-client-access-token.159019/
  */
 public class Auth {
-    private final static String authserver = "https://authserver.mojang.com";
+    static final String AUTHSERVER = "https://authserver.mojang.com";
 
-    public static String[] authenticate(String username, String password, String pClientToken) throws Exception {
+    private Auth() {
+        throw new IllegalStateException("Auth Class");
+    }
+
+    public static String[] authenticate(String username, String password, String pClientToken) throws IOException {
 
         String genClientToken = null;
         if (pClientToken == null)
@@ -33,9 +42,9 @@ public class Auth {
         String payload = "{\"agent\": {\"name\": \"Minecraft\",\"version\": 1},\"username\": \"" + username
                 + "\",\"password\": \"" + password + "\",\"clientToken\": \"" + genClientToken + "\"}";
 
-        String output = postReadURL(payload, new URL(authserver + "/authenticate"));
+        String output = postReadURL(payload, new URL(AUTHSERVER + "/authenticate"));
 
-        System.out.println(output);
+        AppController.LOGGER.log(Level.INFO,"{}",output);
 
         // On recupere les donnees
         JsonParser vParser = new JsonParser();
@@ -47,7 +56,7 @@ public class Auth {
 
         String[] vReturn = { vAccesToken, vUUID, vDisplayName, vClientToken };
         for (String string : vReturn) {
-            System.out.println(string);
+            AppController.LOGGER.log(Level.INFO,"{}",string);
         }
 
         return vReturn;
@@ -63,8 +72,7 @@ public class Auth {
         String payload = "{\"accessToken\": \"" + pAccessToken + "\",\"clientToken\": \"" + pClientToken + "\"}";
 
         try {
-            String output = postReadURL(payload, new URL(authserver + "/validate"));
-            //System.out.println(output);
+            String output = postReadURL(payload, new URL(AUTHSERVER + "/validate"));
             if(output.isEmpty()) return true;
         } catch (Exception e) {
             return false;
@@ -72,17 +80,14 @@ public class Auth {
         return false;
     }
 
-    public static String refresh(String pAccessToken, String pClientToken) throws Exception{
+    public static String refresh(String pAccessToken, String pClientToken) throws IOException{
         String payload = "{\"accessToken\": \"" + pAccessToken + "\",\"clientToken\": \"" + pClientToken + "\"}";
-        String response = postReadURL(payload, new URL(authserver + "/refresh"));
+        String response = postReadURL(payload, new URL(AUTHSERVER + "/refresh"));
         JsonParser vParser =  new JsonParser();
-        String vToken = vParser.parse(response).getAsJsonObject().get("accessToken").getAsString();
-        
-        //System.out.println(vToken);
-        return vToken;
+        return vParser.parse(response).getAsJsonObject().get("accessToken").getAsString();
     }
 
-    private static String postReadURL(String payload, URL url) throws Exception {
+    private static String postReadURL(String payload, URL url) throws IOException {
         HttpsURLConnection con = (HttpsURLConnection) (url.openConnection());
 
         con.setReadTimeout(15000);
@@ -93,19 +98,19 @@ public class Auth {
         con.setDoOutput(true);
 
         OutputStream out = con.getOutputStream();
-        out.write(payload.getBytes("UTF-8"));
+        out.write(payload.getBytes(Charsets.UTF_8));
         out.close();
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
-        String output = "";
+        StringBuilder vBd = new StringBuilder();
         String line = null;
         while ((line = in.readLine()) != null)
-            output += line;
+            vBd.append(line);
 
         in.close();
 
-        return output;
+        return vBd.toString();
     }
 
 }

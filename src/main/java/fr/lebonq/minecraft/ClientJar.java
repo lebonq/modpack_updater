@@ -11,11 +11,17 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import org.apache.logging.log4j.Level;
+
 import fr.lebonq.AppController;
 import fr.lebonq.remote.Downloader;
 import fr.lebonq.utils.GetSha1;
 
 public class ClientJar {
+
+    private ClientJar(){
+    }
+
     /**
      * Permet de dl le client.jar ou de check le sha1
      * @param pFile le client json
@@ -46,7 +52,7 @@ public class ClientJar {
         if ((checkSha1(vSha1, vClientJar)) && vClientJar.exists()) { //On verifie si le SHA1 est bon et si le document existe
             return vClientJar;
         }
-
+        //Si on est ici on doit retelecharger le jar client
         vClientJar.delete();
 
         File vRetun = Downloader.downloadFile(vUrl, "de Minecraft", false, pPath, vSize,true, pController);
@@ -59,8 +65,8 @@ public class ClientJar {
 
     private static boolean checkSha1(String pSha1, File pFile){
         try {
-            if (GetSha1.calcSHA1(pFile).toLowerCase().equals(pSha1)) {
-                System.out.println("SHA1 verifie! Pour " + pFile.getName()); 
+            if (GetSha1.calcSHA1(pFile).equalsIgnoreCase(pSha1)) {
+                AppController.LOGGER.log(Level.INFO,"SHA1 verifie! Pour {}",  pFile.getName()); 
                 return true;
             }
         } catch (NoSuchAlgorithmException | IOException e) {

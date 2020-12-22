@@ -1,5 +1,9 @@
 package fr.lebonq.minecraft.versions_manifest;
 
+import org.apache.logging.log4j.Level;
+
+import fr.lebonq.AppController;
+
 /**
  * Nous permet d'enregistrer le fichier JSON qui liste les version
  */
@@ -8,6 +12,7 @@ public class VersionsFile {
     private Version[] versions;
 
     public VersionsFile() {
+        //Vide car utiliser par GSON
     }
 
     public Latest getLatest() {
@@ -32,7 +37,7 @@ public class VersionsFile {
                 return versions[i].getUrl();
             }
         }
-        System.out.println("Version introuvable");
+        AppController.LOGGER.log(Level.INFO,"Version introuvable");
         return null;
     }
 }

@@ -8,12 +8,17 @@ import java.io.OutputStream;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.logging.log4j.Level;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import fr.lebonq.AppController;
 import fr.lebonq.minecraft.Minecraft;
 /**
  * Cette classe permet de gerer les fichiers des mods, notamment les .jar
@@ -34,20 +39,14 @@ public class FilesManager{
      * @return boolean
      */
     public boolean checkIfModsExists(){
-        if(!(this.aFolderMods.exists())){//On test avant pour ne pas faire crash le programme
-            return false;
-        }
-        if(this.aFolderMods.delete()){//Si on peut le supprimer c'est que le dossier est vide et donc qu'il n'y a acun mods
-            return false;
-        }
-        return true;
+        return this.aFolderMods.exists() || !(this.aFolderMods.delete());
     }
     /**
      * Permet de creer le dossier mods
      */
     public void createMods(){
         if(!checkIfModsExists()){
-            System.out.println("Création du dossier mods car celui ci est introuvable ou vide.");
+            AppController.LOGGER.log(Level.INFO,"Création du dossier mods car celui ci est introuvable ou vide.");
             this.aFolderMods.mkdir();
         }
     }
@@ -57,7 +56,7 @@ public class FilesManager{
      * @param pFile
      * @return boolean
      */
-    public boolean isJar(File pFile) throws Exception{
+    public boolean isJar(File pFile) throws IOException{
         if(pFile.isDirectory()){
             return false;
         }
@@ -69,7 +68,7 @@ public class FilesManager{
      * @param pFile exemple 'server.jar'
      * @return String  exemple 'jar'
      */
-    public String getExtension(File pFile) throws Exception{
+    public String getExtension(File pFile) throws IOException{
         if(pFile.isDirectory()){
             throw new IOException();
         }
@@ -87,7 +86,7 @@ public class FilesManager{
      * @param pFile
      * @return
      */
-    public int numberOfJar(File[] pFile) throws Exception{
+    public int numberOfJar(File[] pFile) throws IOException{
         int res = 0;
         for(int i = 0; i<pFile.length;i++){
             if(isJar(pFile[i])){
@@ -102,7 +101,7 @@ public class FilesManager{
      * @return une liste de File
      * @throws Exception Si le dossier mods a un dossier
      */
-    public File[] listJar() throws Exception{
+    public File[] listJar() throws IOException{
         File[] vJarFilesList = this.aFolderMods.listFiles(); //On met la liste de tout les fichiers du dossier mods
 
         int vNumberOfMods = this.numberOfJar(vJarFilesList);
@@ -125,44 +124,30 @@ public class FilesManager{
 	 * @return l'objet File de notre fichier fabric.mod.json
 	 */
 	public File extractFromJar(File pFile,String pFileToExtract){
-        //System.out.println(pFileToExtract);
-		JarFile vJarFile = null;
 		File vJsonFile = null;
-		try {
-			vJarFile = new JarFile(pFile);
-			try {
-				String vName = pFileToExtract;
-				//On récupère l'objet ZipEntry correspondant
-				ZipEntry vEntry = vJarFile.getEntry(vName);
-				// On crée un File représentant le fichier  :
-				
-				vJsonFile = File.createTempFile(vName, ".tmp"); //On cree un fichier temporaire
-				// On récupère l'InputStream du fichier à l'intérieur du ZIP/JAR
-				InputStream vInput = vJarFile.getInputStream(vEntry);
-				try {
-					// On crée l'OutputStream vers la sortie
-					OutputStream vOutput = new FileOutputStream(vJsonFile);
-					try {
-					   // On utilise une lecture bufférisé
-						byte[] vBuf = new byte[4096];
-						int vLen;
-						while ( (vLen=vInput.read(vBuf)) > 0 ) {
-							vOutput.write(vBuf, 0, vLen);
-						}
-					} finally {
-							// Fermeture du fichier de sortie
-							vOutput.close();
-						}
-				} finally {
-					// Fermeture de l'inputStream en entrée
-					vInput.close();
+		try (JarFile vJarFile = new JarFile(pFile);){
+            String vName = pFileToExtract;
+
+			//On récupère l'objet ZipEntry correspondant
+            ZipEntry vEntry = vJarFile.getEntry(vName);
+            
+			// On crée un File représentant le fichier  :
+            vJsonFile = File.createTempFile(vName, ".tmp"); //On cree un fichier temporaire
+            
+			// On récupère l'InputStream du fichier à l'intérieur du ZIP/JAR
+			try ( InputStream vInput = vJarFile.getInputStream(vEntry);){
+				// On crée l'OutputStream vers la sortie
+				try (OutputStream vOutput = new FileOutputStream(vJsonFile);){
+				   // On utilise une lecture bufférisé
+					byte[] vBuf = new byte[4096];
+					int vLen;
+					while ( (vLen=vInput.read(vBuf)) > 0 ) {
+						vOutput.write(vBuf, 0, vLen);
+					}
 				}
-			} finally {
-				// Fermeture du JarFile
-				vJarFile.close();
 			}
 		} catch (NullPointerException pE) {
-			System.out.println("Fichier " + pFileToExtract + " introuvable");
+			AppController.LOGGER.log(Level.INFO,"Fichier {} introuvable", pFileToExtract);
 			return pFile;//Si erreur car Optifine ou pas de fichier Json dans le mod on retourne le fichier lui meme
 		}catch(Exception pE){
 			pE.printStackTrace();
@@ -174,10 +159,14 @@ public class FilesManager{
      * Permet de lire les fichier XML du serveur
      * @param pFile 
      * @return Un tableau 2d avec les balise XML renvoye dans lordre du fichier
+     * @throws SAXException
+     * @throws ParserConfigurationException
      * @throws Exception
      */
-    public String[][] readXml(File pFile) throws Exception{
+    public String[][] readXml(File pFile) throws IOException, SAXException, ParserConfigurationException{
         DocumentBuilderFactory vDbFactory = DocumentBuilderFactory.newInstance();
+        vDbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        vDbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
         DocumentBuilder vDBuilder = vDbFactory.newDocumentBuilder();
         Document vDocument = vDBuilder.parse(pFile);
 

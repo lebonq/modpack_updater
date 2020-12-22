@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.logging.log4j.Level;
+
 import fr.lebonq.AppController;
 import fr.lebonq.minecraft.RemoteMojangConfig;
 import fr.lebonq.remote.Downloader;
@@ -14,9 +16,9 @@ public class Asset {
     private String aHash;
     private int aSize;
 
-    public Asset(String Name, String hash, int pSize) {
-        this.aName = Name;
-        this.aHash = hash;
+    public Asset(String pName, String pHash, int pSize) {
+        this.aName = pName;
+        this.aHash = pHash;
         this.aSize = pSize;
     }
 
@@ -33,9 +35,8 @@ public class Asset {
         File vCheckFile = new File(pPath + "/" + vFolder + "/" + this.aHash);
         if (vCheckFile.exists()) {// On check si le fichie existe
             try {
-                if (GetSha1.calcSHA1(vCheckFile).toLowerCase().equals(this.aHash)) {// On met en lower case car le sha1
-                                                                                    // retoune est en upper
-                    System.out.println("SHA1 verifie! Pour " + this.aName);
+                if (GetSha1.calcSHA1(vCheckFile).equalsIgnoreCase(this.aHash)) {
+                    AppController.LOGGER.log(Level.INFO,"SHA1 verifie! Pour {}" , this.aName);
                     pController.setUpdateLabel("Verification des fichiers");
                     return;// On peut return le SHA1 est bien verifier donc le telechargement a reussi
                 }
@@ -47,6 +48,6 @@ public class Asset {
             }
         }
         vFile.mkdirs();
-        Downloader.downloadFile(RemoteMojangConfig.mcRessources.getaLink()+ vFolder +"/" + this.aHash, this.aName, false, pPath + "/" + vFolder +"/", this.aSize,false, pController);
+        Downloader.downloadFile(RemoteMojangConfig.MCRESSOURCES.getaLink()+ vFolder +"/" + this.aHash, this.aName, false, pPath + "/" + vFolder +"/", this.aSize,false, pController);
     }
 }

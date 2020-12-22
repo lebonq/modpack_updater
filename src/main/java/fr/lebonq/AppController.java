@@ -1,7 +1,6 @@
 package fr.lebonq;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -9,6 +8,9 @@ import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 import org.aeonbits.owner.ConfigFactory;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import fr.lebonq.files.FilesManager;
 import fr.lebonq.minecraft.Minecraft;
@@ -35,11 +37,11 @@ public class AppController implements Initializable {// Permet de mettre a jour 
     private FilesManager aFilesManager;
     private ModsManager aModsManager;
     private ConfigApp aServerConfig;
-    private Task<Integer> aUpdateTask;
     private Minecraft aMinecraftClient;
     private int aNbRows;
-    final private int aNbColumns = 10;// Inutile ?
-    final private int aGap = 5;
+    static final int NBCOLUMNS = 10;// Inutile ?
+    static final int GAP = 5;
+    public static final Logger LOGGER = LogManager.getLogger(AppController.class);
 
     @FXML
     private ProgressBar aDownloadProgress;
@@ -76,10 +78,11 @@ public class AppController implements Initializable {// Permet de mettre a jour 
     @FXML
     private CheckBox aRemindMe;
 
-    public AppController(String pVersion) throws Exception {
+    public AppController(String pVersion){
         this.aServerConfig = ConfigFactory.create(ConfigApp.class);
         this.aVersionString = pVersion;
         this.aNameOfModpackString = this.aServerConfig.name();
+        LOGGER.log(Level.INFO,"Modpack_updater version {}", this.aVersionString);
     }
 
     /**
@@ -93,10 +96,10 @@ public class AppController implements Initializable {// Permet de mettre a jour 
         createModsManager();
         this.aModsManager.printModList();
 
-        this.aListMods.setHgap(this.aGap);// On defini lecart entre chaque panel
-        this.aListMods.setVgap(this.aGap);
+        this.aListMods.setHgap(GAP);// On defini lecart entre chaque panel
+        this.aListMods.setVgap(GAP);
 
-        this.aNbRows = this.aModsManager.getNumberOfMods() / this.aNbColumns;
+        this.aNbRows = this.aModsManager.getNumberOfMods() / NBCOLUMNS;
 
         this.aVersionLabel.setText(this.aVersionString);// Permet d'afficher la version
         this.aNameOfModpackLabel.setText(this.aNameOfModpackString);// Le nom du modpack
@@ -113,7 +116,7 @@ public class AppController implements Initializable {// Permet de mettre a jour 
     private void createElements() {
         this.aListMods.getChildren().clear();
         int k = 0; // Permet de
-        for (int i = 0; i < this.aNbColumns; i++) {
+        for (int i = 0; i < NBCOLUMNS; i++) {
             for (int j = 0; j < this.aNbRows + 1; j++) {
                 if (k < this.aModsManager.getNumberOfMods()) {
                     this.aListMods.getChildren().add(createElement(k));
@@ -154,19 +157,19 @@ public class AppController implements Initializable {// Permet de mettre a jour 
         
         vImage.setFitHeight(vImageScale);
         vImage.setFitWidth(vImageScale);
-        vImage.setLayoutX((vWidth - vImageScale) / 2);
-        vImage.setLayoutY((vWidth - vImageScale) / 2);
+        vImage.setLayoutX((vWidth - vImageScale) / 2d);
+        vImage.setLayoutY((vWidth - vImageScale) / 2d);
         vPane.getChildren().add(vImage);
 
         Label vVersion = new Label("Version : " + this.aModsManager.getMods()[pI].getVersion());// sa description
-        vVersion.setLayoutY((vImageScale + (vWidth - vImageScale) / 2) + 2);
+        vVersion.setLayoutY((vImageScale + (vWidth - vImageScale) / 2d) + 2d);
         vVersion.setMaxWidth(vWidth);
         vPane.getChildren().add(vVersion);
 
         Label vDescription = new Label(this.aModsManager.getMods()[pI].getDescription());// sa description
-        vDescription.setLayoutY((vImageScale + (vWidth - vImageScale) / 2) + 16);
+        vDescription.setLayoutY((vImageScale + (vWidth - vImageScale) / 2d) + 16d);
         vDescription.setMaxWidth(vWidth);
-        vDescription.setMaxHeight(vHeight - (vImageScale + (vWidth - vImageScale) / 2) - 16);
+        vDescription.setMaxHeight(vHeight - (vImageScale + (vWidth - vImageScale) / 2d) - 16d);
         vDescription.setWrapText(true);
         vPane.getChildren().add(vDescription);
 
@@ -225,11 +228,11 @@ public class AppController implements Initializable {// Permet de mettre a jour 
 
                 String[][] vFilesPath = this.aFilesManager.readXml(Downloader.downloadFile(this.aServerConfig.modsJson(), "Liste des mods",true,"",0,true,this));//On recuepre les fichier JSON du serveur
                     
-                System.out.println("Verification mise à jour");
+                LOGGER.log(Level.INFO,"Verification mise à jour");
                 setUpdateLabel("Verification mise à jour");
                 this.aModsManager.updateModFiles(vFilesPath);//On lance la methode de maj
 
-                System.out.println("Tout les mods sont à jour");
+                LOGGER.log(Level.INFO,"Tout les mods sont à jour");
                 setUpdateLabel("Tout les mods sont à jour");
                 setDownloadProgressbar(1);//Affiche une barre pleine a la fin
 
@@ -249,7 +252,7 @@ public class AppController implements Initializable {// Permet de mettre a jour 
      */
     @FXML
     public void updateTaskLaunch(){
-        this.aUpdateTask = new Task<Integer>() {
+        Task<Integer> vUpdateTask = new Task<Integer>() {
             @Override
             public Integer call() throws Exception {
                 Platform.runLater(() -> aUpdateButton.setDisable(true));//On empeche les autres interaction avec le bouton pour lancer que 1 thread de maj
@@ -260,7 +263,8 @@ public class AppController implements Initializable {// Permet de mettre a jour 
                 return 0;
               }
             };
-          Thread th = new Thread(this.aUpdateTask);
+          Thread th = new Thread(vUpdateTask);
+          th.setName("Updater Thread");
           th.setDaemon(true);
           th.start();
     }
@@ -271,9 +275,9 @@ public class AppController implements Initializable {// Permet de mettre a jour 
     @FXML
     public void updateList(){
         createModsManager();
-        this.aNbRows = this.aModsManager.getNumberOfMods() / this.aNbColumns;
+        this.aNbRows = this.aModsManager.getNumberOfMods() / NBCOLUMNS;
         Platform.runLater(() -> this.aListMods.getChildren().clear());
-        Platform.runLater(() -> createElements());
+        Platform.runLater(() -> this.createElements());
         this.aModsManager.printModList();
     }
 

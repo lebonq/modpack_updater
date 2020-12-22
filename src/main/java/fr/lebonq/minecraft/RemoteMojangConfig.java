@@ -1,10 +1,10 @@
 package fr.lebonq.minecraft;
 
 public enum RemoteMojangConfig{
-    mcMetaData("https://launchermeta.mojang.com/"),
-    mcLibraries("https://libraries.minecraft.net/"),
-    mcRessources("https://resources.download.minecraft.net/"),
-    mcVersionsList("https://launchermeta.mojang.com/mc/game/version_manifest.json");
+    MCMETADATA("https://launchermeta.mojang.com/"),
+    MCLIBRARIES("https://libraries.minecraft.net/"),
+    MCRESSOURCES("https://resources.download.minecraft.net/"),
+    MCVERSIONSLIST("https://launchermeta.mojang.com/mc/game/version_manifest.json");
 
     private String aLink;
 

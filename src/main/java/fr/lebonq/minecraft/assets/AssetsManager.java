@@ -15,6 +15,10 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 public class AssetsManager {
+
+    private AssetsManager(){
+    }
+
     /**
      * Permet de recupere le lien de l'index des assets de la verison
      * @param pFile
@@ -47,15 +51,11 @@ public class AssetsManager {
         JsonObject vObj = null;
         try {
             vObj = (JsonObject) vJp.parse(new FileReader(pFile));
-        } catch (JsonIOException e) {
-            e.printStackTrace();
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
+        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
             e.printStackTrace();
         }
         
-        JsonObject vObjects = (JsonObject) vObj.getAsJsonObject("objects");
+        JsonObject vObjects = vObj.getAsJsonObject("objects");
         Set<Entry<String, JsonElement>> vSet = vObjects.entrySet();//On recupere le tout sous forme d;une hashmap
 
         Asset[] vReturn = new Asset[vSet.size()];//On cree notre tableau d'assets

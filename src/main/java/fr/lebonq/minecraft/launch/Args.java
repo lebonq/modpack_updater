@@ -2,28 +2,28 @@ package fr.lebonq.minecraft.launch;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import fr.lebonq.minecraft.libraries.Librarie;
 /**
  * Ne pas oublier lespace apres les strings
  */
 public class Args {
-    private final String aArg1 = "-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump ";
+    private static final String ARG1 = "-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump ";
     private String aArg2;//Nom OS
     private String aArg3;//Version OS
-    private final String aArg4 = "-Xss1M ";
+    private static final String ARG4 = "-Xss1M ";
     private String aArg5;//Chemin des natives extraites
     private String aArg6;//Nom launcher
     private String aArg7;//Launcher Version
     private String aArg8; //Classpath
-    private final String aArg9 = "-Xmx5G ";//Ram max 5g
-    private final String aArg10 = "-XX:+UnlockExperimentalVMOptions ";
-    private final String aArg11 = "-XX:+UseG1GC ";
-    private final String aArg12 = "-XX:G1NewSizePercent=20 ";
-    private final String aArg13 = "-XX:G1ReservePercent=20 ";
-    private final String aArg14 = "-XX:MaxGCPauseMillis=50 ";
-    private final String aArg15 = "-XX:G1HeapRegionSize=32M ";
+    private static final String ARG9 = "-Xmx5G ";//Ram max 5g
+    private static final String ARG10 = "-XX:+UnlockExperimentalVMOptions ";
+    private static final String ARG11 = "-XX:+UseG1GC ";
+    private static final String ARG12 = "-XX:G1NewSizePercent=20 ";
+    private static final String ARG13 = "-XX:G1ReservePercent=20 ";
+    private static final String ARG14 = "-XX:MaxGCPauseMillis=50 ";
+    private static final String ARG15 = "-XX:G1HeapRegionSize=32M ";
     private String aArg16;//Path to Dlog4j
     private String aArg17;//username
     private String aArg18;//version
@@ -32,8 +32,8 @@ public class Args {
     private String aArg21;//assest index ex 1.16 
     private String aArg22;//UUID
     private String aArg23;//ACCES TOKEN
-    private final String aArg24 = "--userType mojang ";
-    private final String aArg25 = "--versionType release ";
+    private static final String ARG24 = "--userType mojang ";
+    private static final String ARG25 = "--versionType release ";
 
     /**
      * Nom os
@@ -77,7 +77,7 @@ public class Args {
      * @param pLibraries
      * @param pClientJar
      */
-    public void setArg8(Vector<Librarie> pLibraries,File pClientJar,File vLibrariesPath){
+    public void setArg8(List<Librarie> pLibraries,File pClientJar){
         Iterator<Librarie> vIt = pLibraries.iterator();
         String vReturString = "";
         while (vIt.hasNext()) {
@@ -86,7 +86,6 @@ public class Args {
         }
         vReturString += pClientJar.getAbsolutePath();
         this.aArg8 = "-cp " + vReturString +" ";
-        //System.out.println(this.aArg8);
     }
 
     /**
@@ -153,7 +152,7 @@ public class Args {
     }
 
     public String getArg1() {
-        return this.aArg1;
+        return ARG1;
     }
 
     public String getArg2() {
@@ -165,7 +164,7 @@ public class Args {
     }
 
     public String getArg4() {
-        return this.aArg4;
+        return ARG4;
     }
 
     public String getArg5() {
@@ -185,31 +184,31 @@ public class Args {
     }
 
     public String getArg9() {
-        return this.aArg9;
+        return ARG9;
     }
 
     public String getArg10() {
-        return this.aArg10;
+        return ARG10;
     }
 
     public String getArg11() {
-        return this.aArg11;
+        return ARG11;
     }
 
     public String getArg12() {
-        return this.aArg12;
+        return ARG12;
     }
 
     public String getArg13() {
-        return this.aArg13;
+        return ARG13;
     }
 
     public String getArg14() {
-        return this.aArg14;
+        return ARG14;
     }
 
     public String getArg15() {
-        return this.aArg15;
+        return ARG15;
     }
 
     public String getArg16() {
@@ -245,30 +244,30 @@ public class Args {
     }
 
     public String getArg24() {
-        return this.aArg24;
+        return ARG24;
     }
 
     public String getArg25() {
-        return this.aArg25;
+        return ARG25;
     }
     
     public String getCommand(){
         
-        System.out.println("java "  + this.aArg1
+        System.out.println("java "  +ARG1
         +this.aArg2
         +this.aArg3
-        +this.aArg4
+        +ARG4
         +this.aArg5
         +this.aArg6
         +this.aArg7
         +this.aArg8
-        +this.aArg9
-        +this.aArg10
-        +this.aArg11
-        +this.aArg12
-        +this.aArg13
-        +this.aArg14
-        +this.aArg15
+        +ARG9
+        +ARG10
+        +ARG11
+        +ARG12
+        +ARG13
+        +ARG14
+        +ARG15
         +this.aArg16
         +this.aArg17
         +this.aArg18
@@ -277,25 +276,25 @@ public class Args {
         +this.aArg21
         +this.aArg22
         +this.aArg23
-        +this.aArg24
-        +this.aArg25
+        +ARG24
+        +ARG25
         );
 
-        return  "java " +this.aArg1
+        return  "java " +ARG1
         +this.aArg2
         +this.aArg3
-        +this.aArg4
+        +ARG4
         +this.aArg5
         +this.aArg6
         +this.aArg7
         +this.aArg8
-        +this.aArg9
-        +this.aArg10
-        +this.aArg11
-        +this.aArg12
-        +this.aArg13
-        +this.aArg14
-        +this.aArg15
+        +ARG9
+        +ARG10
+        +ARG11
+        +ARG12
+        +ARG13
+        +ARG14
+        +ARG15
         +this.aArg16
         +this.aArg17
         +this.aArg18
@@ -304,8 +303,8 @@ public class Args {
         +this.aArg21
         +this.aArg22
         +this.aArg23
-        +this.aArg24
-        +this.aArg25;
+        +ARG24
+        +ARG25;
 
     }
 }

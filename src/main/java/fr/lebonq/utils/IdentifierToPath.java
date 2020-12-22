@@ -2,6 +2,10 @@ package fr.lebonq.utils;
 
 public class IdentifierToPath {
 
+    private IdentifierToPath(){
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * All credit to https://github.com/ATLauncher/ATLauncher/blob/5a90f8fcc74cc8bc96dbac91d905f4ce1f5fd1e8/src/main/java/com/atlauncher/utils/Utils.java#L1446
      * @param pIdentifier
@@ -24,9 +28,7 @@ public class IdentifierToPath {
             version = version.substring(0, version.indexOf(':'));
         }
     
-        String path = parts[0].replace(".", "/") + "/" + name + "/" + version + "/" + name + "-" + version + classifier
+        return parts[0].replace(".", "/") + "/" + name + "/" + version + "/" + name + "-" + version + classifier
                 + "." + extension;
-
-        return path;
     }
 }

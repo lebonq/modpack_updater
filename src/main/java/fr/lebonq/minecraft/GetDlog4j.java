@@ -11,11 +11,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import org.apache.logging.log4j.Level;
+
 import fr.lebonq.AppController;
 import fr.lebonq.remote.Downloader;
 import fr.lebonq.utils.GetSha1;
 
 public class GetDlog4j {
+
+    private GetDlog4j(){
+
+    }
+
     public static File download(File pFile, String pPath,AppController pController) {
         JsonParser vParser = new JsonParser();
 
@@ -32,11 +39,13 @@ public class GetDlog4j {
         if (vFileCheck.exists()) {
             try {
                 if (GetSha1.calcSHA1(vFileCheck).equals(vFileObj.get("sha1").getAsString())) {
-                    System.out.println("SHA1 valide pour le logger");
+                    AppController.LOGGER.log(Level.INFO,"SHA1 valide pour le logger");
                     return vFileCheck;
                 }
                 else{
-                    vFileCheck.delete();
+                    if(!(vFileCheck.delete())){
+                        throw new IOException();
+                    }
                 }
             } catch (NoSuchAlgorithmException | IOException e) {
                 e.printStackTrace();

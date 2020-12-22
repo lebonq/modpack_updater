@@ -5,6 +5,7 @@ public class Latest {
     private String snapshot;
 
     public Latest() {
+        //Vide car utiliser par GSON
     }
 
     public String getRelease() {

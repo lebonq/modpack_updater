@@ -25,6 +25,7 @@ Avant de le distribuer aux joueurs, veuillez configurer le fichier configApp.pro
 9. Afficher la console MC
 10. Gestion des screens
 11. Netoyage du code et plusieurs ameliorations
+12. Ajustement de la taille de la fenetre
 
 #### Sources from part of the code
 

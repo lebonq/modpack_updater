@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.logging.log4j.Level;
+
 import fr.lebonq.AppController;
 import fr.lebonq.remote.Downloader;
 import fr.lebonq.utils.GetSha1;
@@ -73,13 +75,14 @@ public class Librarie {
         File vFile = new File(pClientPath + "/" + this.aPath);
         if (vFile.exists() && this.aHasSHA1) {// On check si le fichie existe
             try {
-                if (GetSha1.calcSHA1(vFile).toLowerCase().equals(this.aSha1)) {// On met en lower case car le sha1
-                                                                               // retoune est en upper
+                if (GetSha1.calcSHA1(vFile).equalsIgnoreCase(this.aSha1)) {// On met en lower case car le sha1 retoune est en upper
                     this.aFile = vFile;
-                    System.out.println("SHA1 verifie! Pour " + vFile.getName());
+                    AppController.LOGGER.log(Level.INFO,"SHA1 verifie! Pour {}" ,vFile.getName());
                     return;// On peut return le SHA1 est bien verifier donc le telechargement a reussi
                 } else {
-                    vFile.delete();// Sinon on supprime le fichier
+                    if(vFile.delete()){// Sinon on supprime le fichier
+                        AppController.LOGGER.log(Level.INFO,"La suppression de {} a echoue", vFile.getName());
+                    }
                 }
             } catch (NoSuchAlgorithmException | IOException e) {
                 e.printStackTrace();

@@ -41,7 +41,6 @@ public class App extends Application {
             e1.printStackTrace();
         }
         this.aAppVersion = vProperties.getProperty("version");
-        System.out.println("Modpack_updater version " + this.aAppVersion);
     }
     
     public static void main(String[] args) {

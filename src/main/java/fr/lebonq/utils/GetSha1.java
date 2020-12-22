@@ -12,6 +12,10 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 public class GetSha1 {
 
+    private GetSha1(){
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 
      * Calcul du SHA1 vient d'ici https://stackoverflow.com/questions/6293713/java-how-to-create-sha-1-for-a-file
@@ -29,8 +33,7 @@ public class GetSha1 {
      * @throws NoSuchAlgorithmException
      *             should never happen
      */
-    public static String calcSHA1(File file) throws FileNotFoundException,
-            IOException, NoSuchAlgorithmException {
+    public static String calcSHA1(File file) throws IOException, NoSuchAlgorithmException {
 
         MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
         try (InputStream input = new FileInputStream(file)) {

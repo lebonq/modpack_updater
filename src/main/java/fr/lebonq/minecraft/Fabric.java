@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
-import java.util.Iterator;//pour java 14
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -16,6 +16,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+
+import org.apache.logging.log4j.Level;
 
 import fr.lebonq.AppController;
 import fr.lebonq.remote.Downloader;
@@ -27,10 +29,10 @@ public class Fabric {
     private File aFabricJar;
     private File aFabricVersionJson;
 
-    public void setFabricJson(File pFile) throws Exception{
+    public void setFabricJson(File pFile){
         this.aJsonFile = pFile;
         setVersion();
-        System.out.println("On utilisera la version " + this.aVersionFabric + " de fabric");
+        AppController.LOGGER.log(Level.INFO,"On utilisera la version {} de fabric", this.aVersionFabric);
     }
 
     private void setVersion(){
@@ -46,54 +48,48 @@ public class Fabric {
         this.aVersionFabric = vLatest.getAsJsonObject().get("loader").getAsJsonObject().get("version").getAsString();
     }
 
-    public void getZipFabric(String pMcVersion,File pVersionPath,File pMcJar,AppController pAppController) throws Exception{
+    public void getZipFabric(String pMcVersion,File pVersionPath,File pMcJar,AppController pAppController) throws IOException{
         File vTemp = Downloader.downloadFile("https://meta.fabricmc.net//v2/versions/loader/" + pMcVersion + "/" + this.aVersionFabric + "/profile/zip", "Fabric", true, "", 0, true, pAppController);
-        ZipFile vTempZip = new ZipFile(vTemp);
-        Enumeration<? extends ZipEntry> vEntries = vTempZip.entries();
-        //Iterator<? extends ZipEntry> vIt = vEntries.asIterator(); //incompatible avec java 8
-        while(vEntries.hasMoreElements()){
-            ZipEntry vNext = vEntries.nextElement();
-            System.out.println(vNext.getName());
+        try(ZipFile vTempZip = new ZipFile(vTemp);){
+            Enumeration<? extends ZipEntry> vEntries = vTempZip.entries();
+            //Iterator<? extends ZipEntry> vIt = vEntries.asIterator(); //incompatible avec java 8
+            while(vEntries.hasMoreElements()){
+                ZipEntry vNext = vEntries.nextElement();
+                AppController.LOGGER.log(Level.INFO,"{}",vNext.getName());
 
-            File vNextFolder = new File(pVersionPath.getAbsolutePath().substring(0, pVersionPath.getAbsolutePath().lastIndexOf("\\")) + "/"  + vNext.getName().substring(0,  vNext.getName().lastIndexOf("/")));
-            vNextFolder.mkdirs();
-            File vNextFile = new File(pVersionPath.getAbsolutePath().substring(0, pVersionPath.getAbsolutePath().lastIndexOf("\\")) + "/" + vNext.getName()); //On cree un fichier temporaire
-            if(!(vEntries.hasMoreElements())){
-                if(vNextFile.exists()){
-                    this.aFabricJar = vNextFile;
+                File vNextFolder = new File(pVersionPath.getAbsolutePath().substring(0, pVersionPath.getAbsolutePath().lastIndexOf("\\")) + "/"  + vNext.getName().substring(0,  vNext.getName().lastIndexOf("/")));
+                vNextFolder.mkdirs();
+                File vNextFile = new File(pVersionPath.getAbsolutePath().substring(0, pVersionPath.getAbsolutePath().lastIndexOf("\\")) + "/" + vNext.getName()); //On cree un fichier temporaire
+                if(!(vEntries.hasMoreElements())){
+                    if(vNextFile.exists()){
+                        this.aFabricJar = vNextFile;
+                    }
+                    else{
+                        this.aFabricJar = pMcJar;//Le jar de fabric ne doit pas etre le Dummy jar mais le jar de minecraft
+                    }
                 }
                 else{
-                    this.aFabricJar = pMcJar;//Le jar de fabric ne doit pas etre le Dummy jar mais le jar de minecraft
-                }
-            }
-            else{
-                this.aFabricVersionJson = vNextFile;
-                // On récupère l'InputStream du fichier à l'intérieur du ZIP/JAR
-                
-                InputStream vInput = vTempZip.getInputStream(vNext);
-                try {
+                    this.aFabricVersionJson = vNextFile;
+                    // On récupère l'InputStream du fichier à l'intérieur du ZIP/JAR
+                    
+                    InputStream vInput = vTempZip.getInputStream(vNext);
                     // On crée l'OutputStream vers la sortie
-                    OutputStream vOutput = new FileOutputStream(vNextFile);
-                    try {
-                    // On utilise une lecture bufférisé
-                        byte[] vBuf = new byte[4096];
-                        int vLen;
-                        while ( (vLen=vInput.read(vBuf)) > 0 ) {
-                            vOutput.write(vBuf, 0, vLen);
-                        }
+                    try(OutputStream vOutput = new FileOutputStream(vNextFile);) {
+                    
+                        // On utilise une lecture bufférisé
+                            byte[] vBuf = new byte[4096];
+                            int vLen;
+                            while ( (vLen=vInput.read(vBuf)) > 0 ) {
+                                vOutput.write(vBuf, 0, vLen);
+                            }
                     } finally {
-                            // Fermeture du fichier de sortie
-                        vOutput.close();
-                        }
-                } finally {
-                    // Fermeture de l'inputStream en entrée
-                    vInput.close();
-                }
-            }
-        }
-
-        vTempZip.close();        
-    }
+                        // Fermeture de l'inputStream en entrée
+                        vInput.close();
+                    }//FInally
+                }//else
+            }//while
+        }//try
+    }//getZipFabric
 
     public File getAFabricVersionJson() {
         return this.aFabricVersionJson;

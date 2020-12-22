@@ -8,6 +8,10 @@ import com.google.gson.JsonParser;
 
 public class ModJsonManager {
 
+    private ModJsonManager(){
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Permet d'extraire les infromations du fichier JSON
      * @param pFile Notre fichier JSON

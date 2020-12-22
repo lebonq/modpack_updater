@@ -31,6 +31,7 @@
 			<artifactId>java-mojang-api</artifactId>
 			<version>-SNAPSHOT</version>
 		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
 		<dependency>
 			<groupId>org.openjfx</groupId>

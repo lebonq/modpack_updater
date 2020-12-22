@@ -1,4 +1,4 @@
-package fr.lebonq.minecraft.Account;
+package fr.lebonq.minecraft.account;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,8 +14,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 
+import org.apache.logging.log4j.Level;
 import org.shanerx.mojang.Mojang;
 
+import fr.lebonq.AppController;
 import fr.lebonq.utils.Json;
 
 public class Reminder {
@@ -37,9 +39,8 @@ public class Reminder {
 
         JsonParser vParser = new JsonParser();
         String vBodyJson = null;
-        try {
-            vBodyJson = Json.readFile(vUsercache);
-        } catch (IOException e1) {
+        vBodyJson = Json.readFile(vUsercache);
+        if(vBodyJson == null){
             this.aTokenExpires = false;//Si user cache inexistant alors juste on dit que le token nexprire pas
             return;
         }
@@ -48,12 +49,12 @@ public class Reminder {
         SimpleDateFormat vDateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss Z");// On defini le format de la date
         Date vDateDate = null;
         try {
-            vDateDate = vDateFormat.parse(vDate.substring(0));
+            vDateDate = vDateFormat.parse(vDate);
         } catch (ParseException e) {
             this.aTokenExpires = false;
         }
         if (vDateDate.compareTo(new Date()) < 0) {
-            System.out.println("Le token d'acces n'est plus valide nous devons en recuperer un nouveau");
+            AppController.LOGGER.log(Level.INFO,"Le token d'acces n'est plus valide nous devons en recuperer un nouveau");
             this.aTokenExpires = true;
 
         } else {
@@ -91,13 +92,12 @@ public class Reminder {
      * 
      * @throws IOException
      */
-    public void loadRemind() throws IOException {
+    public void loadRemind(){
         File vLauncherSettings = new File(this.aClientFolder.getAbsolutePath() + "/launcher_settings.json");
         JsonParser vParser = new JsonParser();
 
         //Permet de lire proprement un fichier JSON sans le laisser comme jai fait partout ailleurs MDR
         String vBodyJson = Json.readFile(vLauncherSettings);
-        //System.out.println(vBodyJson);
 
         this.aSavedToken = vParser.parse(vBodyJson).getAsJsonObject().get("accessToken").getAsString();//Access token
         this.aSavedDisplayName = vParser.parse(vBodyJson).getAsJsonObject().get("displayName").getAsString();

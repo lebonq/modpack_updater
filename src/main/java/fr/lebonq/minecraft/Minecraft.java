@@ -6,14 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Vector;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.logging.log4j.Level;
 
 import fr.lebonq.AppController;
-import fr.lebonq.minecraft.Account.Auth;
-import fr.lebonq.minecraft.Account.Reminder;
+import fr.lebonq.minecraft.account.Auth;
+import fr.lebonq.minecraft.account.Reminder;
 import fr.lebonq.minecraft.assets.Asset;
 import fr.lebonq.minecraft.assets.AssetsManager;
 import fr.lebonq.minecraft.launch.Args;
@@ -33,7 +34,7 @@ public class Minecraft {
     private File aClientJarMc;
     private File aBinFolder;
     private File aDlog4j;
-    private Vector<Librarie> aLibraries;
+    private List<Librarie> aLibraries;
     private Asset[] aAssets;
     private AppController aController;
     private Args aArgs;
@@ -52,14 +53,12 @@ public class Minecraft {
     public Minecraft(String pRoot, AppController pController) {
 
         this.aController = pController;
-        Scanner pSc = null;
-        try {
-            pSc = new Scanner(Downloader.downloadFile(pRoot + "version.txt", "Version File", true, "", 0, true,
-                    this.aController));
-        } catch (FileNotFoundException e) {
+        try(Scanner pSc = new Scanner(Downloader.downloadFile(pRoot + "version.txt", "Version File", true, "", 0, true,this.aController));){
+            this.aVersion = pSc.nextLine();// On recupere la version necessaire
+        }
+        catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        this.aVersion = pSc.nextLine();// On recupere la version necessaire
 
         // On cree le dossier de minecraft
         this.aClientFolder = new File(System.getProperty("user.home") + "/AppData/Roaming/.modpack_updater");// On cree le dossier du client dans le user directory
@@ -91,13 +90,7 @@ public class Minecraft {
         vObjects.mkdirs();
 
         this.aFabric = new Fabric();
-        try {
-            this.aFabric.setFabricJson(Downloader.downloadFile("https://meta.fabricmc.net/v2/versions/loader/1.16.3",
-                    "Fabric data", true, "", 0, false, pController));
-        } catch (Exception e) {
-            this.aController.setUpdateLabel("Erreur donnees Fabricloader");
-            e.printStackTrace();
-        }
+        this.aFabric.setFabricJson(Downloader.downloadFile("https://meta.fabricmc.net/v2/versions/loader/" + this.aVersion,"Fabric data", true, "", 0, false, pController));
 
         this.aReminder = new Reminder(this.aClientFolder);
         if(this.aReminder.hasReminder() && !(this.aReminder.tokenExpires())){//Si il y a un reminder on le charge
@@ -110,8 +103,8 @@ public class Minecraft {
     public void checkGame() {
         
         //On recupere le client.json
-        File vVersionManifest = Downloader.downloadFile(RemoteMojangConfig.mcVersionsList.getaLink(), "MC manifest", true, "", 0,true, this.aController);
-        VersionsFile vClientJson = ExtractInfoVersionsManifest.extractUrl(this.aVersion, vVersionManifest);
+        File vVersionManifest = Downloader.downloadFile(RemoteMojangConfig.MCVERSIONSLIST.getaLink(), "MC manifest", true, "", 0,true, this.aController);
+        VersionsFile vClientJson = ExtractInfoVersionsManifest.extractUrl(vVersionManifest);
         String vClientJsonUrl = vClientJson.retriveUrlFromVersion(this.aVersion);
         this.aClientJsonCurrentVersion = Downloader.downloadFile(vClientJsonUrl, "Fichier de version :" + this.aVersion, false, this.aVersionFolder.getAbsolutePath() + "/", 0,true, this.aController);
         
@@ -121,9 +114,9 @@ public class Minecraft {
         //On telecharge le client
         this.aClientJarMc = ClientJar.downloadJar(this.aClientJsonCurrentVersion, this.aVersionFolder.getAbsolutePath() + "/", this.aController,this.aVersion);
         //On renomme le fichier et le reafecte au bon emplacement
-        File VMcJarTemps = new File(this.aVersionFolder.getAbsolutePath() + "/" +this.aVersion + ".jar");
-        this.aClientJarMc.renameTo(VMcJarTemps);//On renomme le fichier jar
-        this.aClientJarMc = VMcJarTemps;
+        File vMcJarTemps = new File(this.aVersionFolder.getAbsolutePath() + "/" +this.aVersion + ".jar");
+        this.aClientJarMc.renameTo(vMcJarTemps);//On renomme le fichier jar
+        this.aClientJarMc = vMcJarTemps;
 
         try {
 			this.aFabric.getZipFabric(this.aVersion,this.aVersionFolder,this.aClientJarMc, this.aController);
@@ -146,7 +139,7 @@ public class Minecraft {
         while(vIt.hasNext()){
             Librarie vTemp = vIt.next();
             i++;
-            this.aController.setDownloadProgressbar((double)((i*100l)/this.aLibraries.size())/100);
+            this.aController.setDownloadProgressbar(((i*100d)/this.aLibraries.size())/100d);
             vTemp.download(this.aLibrariesFolder.getAbsolutePath(), this.aController);
             vTemp.extractNatives(this.aBinFolder);
         }
@@ -160,7 +153,7 @@ public class Minecraft {
         this.aArgs.setArg5(this.aBinFolder.getAbsolutePath());
         this.aArgs.setArg6("Quent_Launcher");
         this.aArgs.setArg7("3.0");
-        this.aArgs.setArg8(this.aLibraries, this.aFabric.getClientJar(), this.aLibrariesFolder);
+        this.aArgs.setArg8(this.aLibraries, this.aFabric.getClientJar());
         this.aArgs.setArg16(this.aDlog4j);
         this.aArgs.setArg17(this.aUsernameMc);
         this.aArgs.setArg18(this.aVersion);
@@ -170,11 +163,10 @@ public class Minecraft {
         this.aArgs.setArg22(this.aUUID);
         this.aArgs.setArg23(this.aAccesToken);   
         
-        System.out.println(this.aArgs.getCommand());
+        AppController.LOGGER.log(Level.INFO,"Command use : {}",this.aArgs.getCommand());
         try {
             this.aMcProcess = Runtime.getRuntime().exec(this.aArgs.getCommand(),null,this.aClientFolder);
             
-            //System.out.println(vProcess.pid());
 
             BufferedReader processOutputReader = new BufferedReader(new InputStreamReader(this.aMcProcess.getInputStream()));
             String readLine;
@@ -200,7 +192,7 @@ public class Minecraft {
         int i = 0;
         for (Asset asset : aAssets) {
             i++;
-            this.aController.setDownloadProgressbar((double)((i*100l)/this.aAssets.length)/100);
+            this.aController.setDownloadProgressbar(((i*100d)/this.aAssets.length)/100d);
             asset.createFolderDownload(this.aAssetsFolder.getAbsolutePath() + "/objects/", this.aController);
         }
     }
@@ -209,22 +201,21 @@ public class Minecraft {
      * @return pRemind le boolean si luser veut rester co
      * @throws Exception
      */
-    public void login(boolean pRemind) throws Exception{
+    public void login(boolean pRemind) throws IOException{
         if(pRemind && this.aReminder.hasReminder() && !(this.aReminder.tokenExpires())){
             if(Auth.validate(this.aAccesToken, this.aClientToken)){
-                System.out.print("Access token still valid.");
+                AppController.LOGGER.log(Level.INFO,"Access token still valid.");
                 return;
             }
             else{
                 this.aAccesToken = Auth.refresh(this.aAccesToken, this.aClientToken);
-                System.out.print("Access token still need to be refresh.");
+                AppController.LOGGER.log(Level.INFO,"Access token still need to be refresh.");
                 this.aReminder.saveRemind(this.aAccesToken, this.aUUID, this.aUsernameMc, this.aUsername, this.aClientToken);
                 return;
             }
         }else{
-        String[] vResponse = new String[4];
-        vResponse = Auth.authenticate(this.aUsername, this.aPassword, null);
-        System.out.print("Get access token.");
+        String[] vResponse = Auth.authenticate(this.aUsername, this.aPassword, null);
+        AppController.LOGGER.log(Level.INFO,"Get access token.");
         this.aUsernameMc = vResponse[2];
         this.aUUID = vResponse[1];
         this.aAccesToken = vResponse[0];
@@ -243,11 +234,7 @@ public class Minecraft {
     }
 
     public void loadReminder(){
-        try {
-            this.aReminder.loadRemind();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.aReminder.loadRemind();
         this.aUsername = this.aReminder.getSavedUsername();
         this.aUUID = this.aReminder.getSavedUUID();
         this.aAccesToken = this.aReminder.getSavedToken();
