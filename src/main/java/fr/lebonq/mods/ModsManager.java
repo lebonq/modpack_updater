@@ -34,11 +34,9 @@ public class ModsManager {
         this.aController = pController;
 
         for (int i = 0; i < pListJars.length; i++) {
-            File vJson = this.aFilesManager.extractFromJar(pListJars[i], "fabric.mod.json");// On recupre le fichier
-                                                                                            // JSON
+            File vJson = this.aFilesManager.extractFromJar(pListJars[i], "fabric.mod.json");// On recupre le fichier JSON
             String[] vInfo = ModJsonManager.getModInfo(vJson); // On recupere les info dans le fichier JSON
-            this.aModsList[i] = new Mod(pListJars[i], vInfo[0], vInfo[1],
-                    this.aFilesManager.extractFromJar(pListJars[i], vInfo[2]), vInfo[3]);
+            this.aModsList[i] = new Mod(pListJars[i], vInfo[0], vInfo[1],this.aFilesManager.extractFromJar(pListJars[i], vInfo[2]), vInfo[3]);
             vJson.deleteOnExit();
             this.aTotalSize += this.aModsList[i].getSize();
         }

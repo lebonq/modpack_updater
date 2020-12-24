@@ -38,9 +38,9 @@ public class Reminder {
         this.aSettingsFile = new File(this.aClientFolder.getAbsolutePath() + "/launcher_settings.json");
 
         JsonParser vParser = new JsonParser();
-        String vBodyJson = null;
-        vBodyJson = Json.readFile(vUsercache);
+        String vBodyJson = Json.readFile(vUsercache);
         if(vBodyJson == null){
+            AppController.LOGGER.log(Level.ERROR, "Pas de fichier token trouvé");
             this.aTokenExpires = false;//Si user cache inexistant alors juste on dit que le token nexprire pas
             return;
         }
@@ -54,7 +54,7 @@ public class Reminder {
             this.aTokenExpires = false;
         }
         if (vDateDate.compareTo(new Date()) < 0) {
-            AppController.LOGGER.log(Level.INFO,"Le token d'acces n'est plus valide nous devons en recuperer un nouveau");
+            AppController.LOGGER.log(Level.WARN,"Le token d'acces n'est plus valide nous devons en recuperer un nouveau");
             this.aTokenExpires = true;
 
         } else {

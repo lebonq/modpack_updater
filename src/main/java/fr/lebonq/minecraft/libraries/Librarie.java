@@ -80,8 +80,9 @@ public class Librarie {
                     AppController.LOGGER.log(Level.INFO,"SHA1 verifie! Pour {}" ,vFile.getName());
                     return;// On peut return le SHA1 est bien verifier donc le telechargement a reussi
                 } else {
+                    AppController.LOGGER.log(Level.WARN,"SHA1 non verifie! Pour {}" ,vFile.getName());
                     if(vFile.delete()){// Sinon on supprime le fichier
-                        AppController.LOGGER.log(Level.INFO,"La suppression de {} a echoue", vFile.getName());
+                        AppController.LOGGER.log(Level.ERROR,"La suppression de {} a echoue", vFile.getName());
                     }
                 }
             } catch (NoSuchAlgorithmException | IOException e) {

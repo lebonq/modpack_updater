@@ -252,34 +252,7 @@ public class Args {
     }
     
     public String getCommand(){
-        
-        System.out.println("java "  +ARG1
-        +this.aArg2
-        +this.aArg3
-        +ARG4
-        +this.aArg5
-        +this.aArg6
-        +this.aArg7
-        +this.aArg8
-        +ARG9
-        +ARG10
-        +ARG11
-        +ARG12
-        +ARG13
-        +ARG14
-        +ARG15
-        +this.aArg16
-        +this.aArg17
-        +this.aArg18
-        +this.aArg19
-        +this.aArg20
-        +this.aArg21
-        +this.aArg22
-        +this.aArg23
-        +ARG24
-        +ARG25
-        );
-
+    
         return  "java " +ARG1
         +this.aArg2
         +this.aArg3

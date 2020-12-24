@@ -41,7 +41,10 @@ public class Asset {
                     return;// On peut return le SHA1 est bien verifier donc le telechargement a reussi
                 }
                 else{
-                    vCheckFile.delete();//sinon on delete pour redl
+                    AppController.LOGGER.log(Level.WARN,"SHA1 non verifie! Pour {}" , this.aName);
+                    if(vCheckFile.delete()){// Sinon on supprime le fichier pour rdl
+                        AppController.LOGGER.log(Level.ERROR,"La suppression de {} a echoue", vFile.getName());
+                    }
                 }
             } catch (NoSuchAlgorithmException | IOException e) {
                 e.printStackTrace();

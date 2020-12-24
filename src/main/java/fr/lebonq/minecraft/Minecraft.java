@@ -163,7 +163,7 @@ public class Minecraft {
         this.aArgs.setArg22(this.aUUID);
         this.aArgs.setArg23(this.aAccesToken);   
         
-        AppController.LOGGER.log(Level.INFO,"Command use : {}",this.aArgs.getCommand());
+        AppController.LOGGER.log(Level.DEBUG,"Command use : {}",this.aArgs.getCommand());
         try {
             this.aMcProcess = Runtime.getRuntime().exec(this.aArgs.getCommand(),null,this.aClientFolder);
             

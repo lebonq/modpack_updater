@@ -43,6 +43,7 @@ public class GetDlog4j {
                     return vFileCheck;
                 }
                 else{
+                    AppController.LOGGER.log(Level.WARN,"SHA1 non valide pour le logger");
                     if(!(vFileCheck.delete())){
                         throw new IOException();
                     }

@@ -37,7 +37,7 @@ public class VersionsFile {
                 return versions[i].getUrl();
             }
         }
-        AppController.LOGGER.log(Level.INFO,"Version introuvable");
+        AppController.LOGGER.log(Level.FATAL,"Version introuvable");
         return null;
     }
 }

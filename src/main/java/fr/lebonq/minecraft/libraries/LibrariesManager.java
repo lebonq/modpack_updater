@@ -51,7 +51,7 @@ public class LibrariesManager {
             Librarie vReturn = new Librarie(vPath, "", 0, vUrl,false);
             vLibrarieVector.add(vReturn);
         }
-        AppController.LOGGER.log(Level.INFO,"{}", vLibrariesFabric);
+        AppController.LOGGER.log(Level.DEBUG,"{}", vLibrariesFabric);
         
         //For mc libraries
         JsonParser vParser = new JsonParser();
