@@ -145,16 +145,15 @@ public class AppController implements Initializable {// Permet de mettre a jour 
         vName.setMaxWidth(vWidth);
         vPane.getChildren().add(vName);
 
-        ImageView vImage = null;
-        FileInputStream vInput = null;
-        try {
-            vInput = new FileInputStream(this.aModsManager.getMods()[pI].getIconInJar());
-            vImage = new ImageView(new Image(vInput));// Son logo
-            vInput.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        ImageView vImage;
+        try (FileInputStream vInput = new FileInputStream(this.aModsManager.getMods()[pI].getIconInJar());){
+            vImage = new ImageView(new Image(vInput));//Son logo
         }
-        
+        catch (IOException e) {
+            e.printStackTrace();
+            vImage = null;
+        }
+    
         vImage.setFitHeight(vImageScale);
         vImage.setFitWidth(vImageScale);
         vImage.setLayoutX((vWidth - vImageScale) / 2d);

@@ -11,6 +11,8 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import fr.lebonq.AppController;
 import fr.lebonq.minecraft.account.Auth;
@@ -167,14 +169,14 @@ public class Minecraft {
         try {
             this.aMcProcess = Runtime.getRuntime().exec(this.aArgs.getCommand(),null,this.aClientFolder);
             
-
+            Logger vMinecraftLogger = LogManager.getLogger(Minecraft.class);
             BufferedReader processOutputReader = new BufferedReader(new InputStreamReader(this.aMcProcess.getInputStream()));
             String readLine;
             this.aController.setUpdateLabel("Minecraft est lance");
             //On rentre dans la boucle du jeu
             while ((readLine = processOutputReader.readLine()) != null)
             {
-                System.out.println(readLine + System.lineSeparator());
+                vMinecraftLogger.info(readLine + System.lineSeparator());
             }
 
         } catch (IOException e) {
@@ -209,7 +211,7 @@ public class Minecraft {
             }
             else{
                 this.aAccesToken = Auth.refresh(this.aAccesToken, this.aClientToken);
-                AppController.LOGGER.log(Level.INFO,"Access token still need to be refresh.");
+                AppController.LOGGER.log(Level.WARN,"Access token still need to be refresh.");
                 this.aReminder.saveRemind(this.aAccesToken, this.aUUID, this.aUsernameMc, this.aUsername, this.aClientToken);
                 return;
             }
