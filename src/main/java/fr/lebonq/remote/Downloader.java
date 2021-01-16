@@ -46,7 +46,8 @@ public class Downloader {
             HttpEntity vEntity = vHttpClient.execute(vRequest).getEntity();
             
             if(pTemp){
-                vDownloadedFile = File.createTempFile(pUrl,".tmp");
+                vDownloadedFile = File.createTempFile("modpackupdater/" + pUrl.substring(pUrl.lastIndexOf("/")),".tmp");
+                vDownloadedFile.deleteOnExit(); //On le supprime pour eviter de saturer le stockage du client
             }else{
                 vDownloadedFile = new File(pPath + pUrl.substring(pUrl.lastIndexOf("/"))); // Permet de mettre le nom du fichier distant
                 AppController.LOGGER.log(Level.INFO,"{}",pUrl);

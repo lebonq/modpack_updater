@@ -132,7 +132,8 @@ public class FilesManager{
             ZipEntry vEntry = vJarFile.getEntry(vName);
             
 			// On crée un File représentant le fichier  :
-            vJsonFile = File.createTempFile(vName, ".tmp"); //On cree un fichier temporaire
+            vJsonFile = File.createTempFile("modpackupdater/" + vName, ".tmp"); //On cree un fichier temporaire
+            vJsonFile.deleteOnExit(); //On le supprime pour eviter de saturer le stockage du client
             
 			// On récupère l'InputStream du fichier à l'intérieur du ZIP/JAR
 			try ( InputStream vInput = vJarFile.getInputStream(vEntry);){
