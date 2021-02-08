@@ -65,7 +65,7 @@ public class ModsManager {
         int vNbFiles = pFiles.length-1;
         int i = 0; 
         int j = 0;
-        while(i < vNbFiles){
+        while(i <= vNbFiles){
             if(i == this.aNumberOfMods){//Si nous avons deja parcouru tout les mods locaux alors on telecharge tout les restes
                 while(i <= vNbFiles){
                     Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, this.aFilesManager.getModFolder().getAbsolutePath()+"/", 0,true,this.aController);

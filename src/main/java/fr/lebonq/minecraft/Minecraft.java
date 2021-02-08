@@ -168,7 +168,7 @@ public class Minecraft {
         AppController.LOGGER.log(Level.DEBUG,"Command use : {}",this.aArgs.getCommand());
         try {
             this.aMcProcess = Runtime.getRuntime().exec(this.aArgs.getCommand(),null,this.aClientFolder);
-            
+
             Logger vMinecraftLogger = LogManager.getLogger(Minecraft.class);
             BufferedReader processOutputReader = new BufferedReader(new InputStreamReader(this.aMcProcess.getInputStream()));
             String readLine;
