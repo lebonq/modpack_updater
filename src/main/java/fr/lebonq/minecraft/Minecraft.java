@@ -170,13 +170,15 @@ public class Minecraft {
             this.aMcProcess = Runtime.getRuntime().exec(this.aArgs.getCommand(),null,this.aClientFolder);
 
             Logger vMinecraftLogger = LogManager.getLogger(Minecraft.class);
-            BufferedReader processOutputReader = new BufferedReader(new InputStreamReader(this.aMcProcess.getInputStream()));
-            String readLine;
-            this.aController.setUpdateLabel("Minecraft est lance");
-            //On rentre dans la boucle du jeu
-            while ((readLine = processOutputReader.readLine()) != null)
-            {
-                vMinecraftLogger.info(readLine + System.lineSeparator());
+            try (InputStreamReader vProcessReader = new InputStreamReader(this.aMcProcess.getInputStream());){
+                BufferedReader processOutputReader = new BufferedReader(vProcessReader);
+                String readLine;
+                this.aController.setUpdateLabel("Minecraft est lance");
+                //On rentre dans la boucle du jeu
+                while ((readLine = processOutputReader.readLine()) != null)
+                {
+                    vMinecraftLogger.info(readLine + System.lineSeparator());
+                }
             }
 
         } catch (IOException e) {

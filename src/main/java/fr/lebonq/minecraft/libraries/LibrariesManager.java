@@ -3,6 +3,7 @@ package fr.lebonq.minecraft.libraries;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -37,9 +38,9 @@ public class LibrariesManager {
 
         JsonObject vFileFabric = null;
         List<Librarie> vLibrarieVector = new ArrayList<>();//On renvoie un hashset pour pouvoir gerer les natives etc
-        try {
-            vFileFabric = (JsonObject) vParserFabric.parse(new FileReader(pFileFabric));
-        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
+        try(FileReader vFileFarbicReader = new FileReader(pFileFabric);) {
+            vFileFabric = (JsonObject) vParserFabric.parse(vFileFarbicReader);
+        } catch (JsonIOException | JsonSyntaxException | IOException e) {
             e.printStackTrace();
         }
         JsonArray vLibrariesFabric = vFileFabric.getAsJsonObject().get("libraries").getAsJsonArray();
@@ -57,9 +58,9 @@ public class LibrariesManager {
         JsonParser vParser = new JsonParser();
 
         JsonObject vFile = null;
-        try {
-            vFile = (JsonObject) vParser.parse(new FileReader(pFileMc));
-        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
+        try(FileReader vFileMcReader = new FileReader(pFileMc);){
+            vFile = (JsonObject) vParser.parse(vFileMcReader);
+        } catch (JsonIOException | JsonSyntaxException | IOException e) {
             e.printStackTrace();
         }
         JsonArray vLibraries = vFile.getAsJsonArray("libraries");

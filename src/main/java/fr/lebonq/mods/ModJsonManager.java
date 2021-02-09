@@ -23,8 +23,8 @@ public class ModJsonManager {
         String vVersion = null;
         String vImage = null;
         String vDescription = null;
-        try {
-            JsonObject vJsonO = (JsonObject) vJsonP.parse(new FileReader(pFile));//On converti en JsonObject pour avoir acces a tout les champs
+        try(FileReader vFileReader = new FileReader(pFile);){
+            JsonObject vJsonO = (JsonObject) vJsonP.parse(vFileReader);//On converti en JsonObject pour avoir acces a tout les champs
        
             vName = vJsonO.get("name").getAsString();//On recupere la String correpondante
             vVersion = vJsonO.get("version").getAsString();

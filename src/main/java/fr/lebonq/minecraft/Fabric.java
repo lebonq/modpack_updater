@@ -39,9 +39,9 @@ public class Fabric {
         JsonParser vParser = new JsonParser();
 
         JsonArray vFile = null;
-        try {
-            vFile = (JsonArray) vParser.parse(new FileReader(this.aJsonFile));
-        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
+        try(FileReader vJsoFileReader = new FileReader(this.aJsonFile)) {
+            vFile = (JsonArray) vParser.parse(vJsoFileReader);
+        } catch (JsonIOException | JsonSyntaxException | IOException e) {
             e.printStackTrace();
         }
         JsonElement vLatest = vFile.get(0);
