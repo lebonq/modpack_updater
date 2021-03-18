@@ -13,6 +13,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang3.ObjectUtils.Null;
 import org.apache.logging.log4j.Level;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -39,12 +40,13 @@ public class FilesManager{
      * @return boolean
      */
     public boolean checkIfModsExists(){
-        return this.aFolderMods.exists() || !(this.aFolderMods.delete());
+        return this.aFolderMods.exists();
     }
     /**
      * Permet de creer le dossier mods
      */
     public void createMods(){
+        
         if(!checkIfModsExists()){
             AppController.LOGGER.log(Level.INFO,"Création du dossier mods car celui ci est introuvable ou vide.");
             this.aFolderMods.mkdir();
@@ -88,6 +90,9 @@ public class FilesManager{
      */
     public int numberOfJar(File[] pFile) throws IOException{
         int res = 0;
+
+        if(pFile == null) return res;
+        
         for(int i = 0; i<pFile.length;i++){
             if(isJar(pFile[i])){
                 res++;
