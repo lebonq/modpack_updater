@@ -3,7 +3,7 @@ package fr.lebonq.minecraft.assets;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -28,9 +28,9 @@ public class AssetsManager {
         JsonParser vJp = new JsonParser();
         JsonObject vObj = null;
         
-        try {
-            vObj = (JsonObject) vJp.parse(new FileReader(pFile));
-        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
+        try(FileReader vFileReader = new FileReader(pFile);){
+            vObj = (JsonObject) vJp.parse(vFileReader);
+        } catch (JsonIOException | JsonSyntaxException | IOException e) {
             e.printStackTrace();
         }
         
@@ -49,9 +49,10 @@ public class AssetsManager {
     public static Asset[] getAssets(File pFile){
         JsonParser vJp = new JsonParser();
         JsonObject vObj = null;
-        try {
-            vObj = (JsonObject) vJp.parse(new FileReader(pFile));
-        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
+        
+        try(FileReader vFileReader = new FileReader(pFile);){
+            vObj = (JsonObject) vJp.parse(vFileReader);
+        } catch (JsonIOException | JsonSyntaxException | IOException e) {
             e.printStackTrace();
         }
         

@@ -179,6 +179,7 @@ public class Minecraft {
                 {
                     vMinecraftLogger.info(readLine + System.lineSeparator());
                 }
+                processOutputReader.close();
             }
 
         } catch (IOException e) {

@@ -60,6 +60,7 @@ public class Fabric {
                 File vNextFolder = new File(pVersionPath.getAbsolutePath().substring(0, pVersionPath.getAbsolutePath().lastIndexOf("\\")) + "/"  + vNext.getName().substring(0,  vNext.getName().lastIndexOf("/")));
                 vNextFolder.mkdirs();
                 File vNextFile = new File(pVersionPath.getAbsolutePath().substring(0, pVersionPath.getAbsolutePath().lastIndexOf("\\")) + "/" + vNext.getName()); //On cree un fichier temporaire
+               
                 if(!(vEntries.hasMoreElements())){
                     if(vNextFile.exists()){
                         this.aFabricJar = vNextFile;

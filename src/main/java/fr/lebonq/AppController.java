@@ -110,8 +110,6 @@ public class AppController implements Initializable {// Permet de mettre a jour 
     /**
      * Permet de creer ou de mettre a jour la liste visuel des mods
      * 
-     * @param nCols
-     * @param nRows
      */
     private void createElements() {
         this.aListMods.getChildren().clear();

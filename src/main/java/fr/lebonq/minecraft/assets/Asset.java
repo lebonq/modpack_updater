@@ -26,7 +26,7 @@ public class Asset {
      * Permet de cree le dossier de lasset et de telechager le fichier Verifie aussi
      * si le fichier n'existe pas deja
      * 
-     * @param pFile
+     * @param pPath
      * @param pController
      */
     public void createFolderDownload(String pPath, AppController pController) {

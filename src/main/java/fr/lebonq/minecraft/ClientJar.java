@@ -33,10 +33,10 @@ public class ClientJar {
         JsonParser vJp = new JsonParser();
         JsonObject vObj = null;
    
-        try {
-            vObj = (JsonObject) vJp.parse(new FileReader(pFile));
-        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException e1) {
-            e1.printStackTrace();
+        try(FileReader vFileReader = new FileReader(pFile);){
+            vObj = (JsonObject) vJp.parse(vFileReader);
+        } catch (JsonIOException | JsonSyntaxException | IOException e) {
+            e.printStackTrace();
         }
 
 

@@ -19,8 +19,8 @@ public class ExtractInfoVersionsManifest {
     public static VersionsFile extractUrl( File pFile) {
         Gson gson = new Gson(); 
         VersionsFile vVersions = null;
-        try {
-            vVersions = gson.fromJson(new FileReader(pFile), VersionsFile.class);
+        try(FileReader vFileReader = new FileReader(pFile);){
+            vVersions = gson.fromJson(vFileReader, VersionsFile.class);
         } catch (Exception pE){
             pE.printStackTrace();
         }

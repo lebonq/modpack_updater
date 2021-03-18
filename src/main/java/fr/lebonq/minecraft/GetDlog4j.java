@@ -27,9 +27,9 @@ public class GetDlog4j {
         JsonParser vParser = new JsonParser();
 
         JsonObject vFile = null;
-        try {
-            vFile = (JsonObject) vParser.parse(new FileReader(pFile));
-        } catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
+        try(FileReader vFileReader = new FileReader(pFile);){
+            vFile = (JsonObject) vParser.parse(vFileReader);
+        } catch (JsonIOException | JsonSyntaxException | IOException e) {
             e.printStackTrace();
         }
 
