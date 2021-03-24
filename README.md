@@ -1,5 +1,7 @@
 [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/lebonq/modpack_updater.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/lebonq/modpack_updater/context:java)
 
+NEED A BIG REWRITE BECAUSE THE CODE IS... WELL HORRIBLE
+
 # modpack_updater
 
 Ce logiciel permet de maintenir les mods [Fabric](https://fabricmc.net/) des joueurs a jour des modpacks crees avec [modpack_uploader](https://github.com/lebonq/modpack_uploader).
