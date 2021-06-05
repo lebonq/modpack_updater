@@ -158,7 +158,7 @@ public class Minecraft {
         this.aArgs.setArg8(this.aLibraries, this.aFabric.getClientJar());
         this.aArgs.setArg16(this.aDlog4j);
         this.aArgs.setArg17(this.aUsernameMc);
-        this.aArgs.setArg18(this.aVersion);
+        this.aArgs.setArg18("Quent_Launcher");
         this.aArgs.setArg19(this.aClientFolder);
         this.aArgs.setArg20(this.aAssetsFolder);
         this.aArgs.setArg21(this.aVersion.substring(0, this.aVersion.lastIndexOf(".")));

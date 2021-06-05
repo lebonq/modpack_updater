@@ -62,47 +62,29 @@ public class ModsManager {
     }
     
     public void updateModFiles(final String[][] pFiles){
-        int vNbFiles = pFiles.length-1;
-        int i = 0; 
-        int j = 0;
-        while(i <= vNbFiles){
-            if(i == this.aNumberOfMods){//Si nous avons deja parcouru tout les mods locaux alors on telecharge tout les restes
-                while(i <= vNbFiles){
-                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, this.aFilesManager.getModFolder().getAbsolutePath()+"/", 0,true,this.aController);
-                    this.aController.updateList();
-                    i++;j++;
-                }
-                return;
-            }
-            if(!(this.aModsList[i].getName().equals(pFiles[j][0]))){//Si les noms sont differente c'est que le mods distant manque en local
-                if(IsContain.isContain(i, 0, pFiles, this.aModsList[i].getName())){
-                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false, this.aFilesManager.getModFolder().getAbsolutePath() +"/", 0,true,this.aController);
-                    this.aController.updateList();
-                    //Ici les replaceAll permet de retirer le .json du path du fichier
-                    j++;//on avance j mais pas i
-                }
-                else{
-                    this.aController.setLittleUpdateLabel("Suppression d'un mod obsolete");
-                    AppController.LOGGER.log(Level.INFO,"Suppression d un mod obsolete");
-                    if(!(this.aModsList[i].getFile().delete())){
-                        //TO-DO
+
+        for (int remote = 0; remote < pFiles.length; remote++) {
+            for (int local = 0; local < this.aNumberOfMods; local++) {
+                if (pFiles[remote][0].equals(this.aModsList[local].getName())) {
+                    if (!(pFiles[remote][1].equals(this.aModsList[local].getVersion()))) {
+                        this.aModsList[local].getFile().delete();
+                        Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[remote][2].replaceAll(".json", ""), pFiles[remote][0], false, this.aFilesManager.getModFolder().getAbsolutePath() + "/", 0, true, this.aController);
                     }
-                    i++;//On avance i car le mods doit etre supprimer
+                    break;
+                }
+                if (local == this.aNumberOfMods - 1){
+                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[remote][2].replaceAll(".json", ""), pFiles[remote][0], false, this.aFilesManager.getModFolder().getAbsolutePath()+"/", 0,true,this.aController);
                 }
             }
-            else{
-                if(!(this.aModsList[i].getVersion().equals(pFiles[j][1]))){//On compare les versions si differente on met a jour
-                    if(!(this.aModsList[i].getFile().delete())){
-                        //TO-DO
-                    }
-                    Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[j][2].replaceAll(".json", ""), pFiles[j][0], false,  this.aFilesManager.getModFolder().getAbsolutePath() +"/", 0,true,this.aController);
-                    this.aController.updateList();
-                    i++;
-                    j++;
+        }
+
+        for (int local = 0; local < this.aNumberOfMods; local++) {
+            for (int remote = 0; remote < pFiles.length; remote++) {
+                if(pFiles[remote][0].equals(this.aModsList[local].getName())){
+                    break;
                 }
-                else{
-                    i++;
-                    j++;
+                if (remote == pFiles.length - 1) {
+                    this.aModsList[local].getFile().delete();
                 }
             }
         }
