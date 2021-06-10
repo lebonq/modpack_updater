@@ -6,14 +6,14 @@
 	<packaging>jar</packaging>
 	<groupId>fr.lebonq</groupId>
 	<artifactId>modpack_updater</artifactId>
-	<version>3.2.2</version>
+	<version>3.2.3</version>
 
 	<name>modpack_updater</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>14</maven.compiler.source>
-		<maven.compiler.target>14</maven.compiler.target> <!--coucou :)-->
+		<maven.compiler.source>16</maven.compiler.source>
+		<maven.compiler.target>16</maven.compiler.target> <!--coucou :)-->
 	</properties>
 
 	
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx</artifactId>
-			<version>14.0.2.1</version>
+			<version>16</version>
 			<type>pom</type>
 		</dependency>
 
@@ -44,48 +44,48 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-media</artifactId>
-			<version>14.0.2.1</version>
+			<version>16</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-swing</artifactId>
-			<version>14.0.2.1</version>
+			<version>16</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-web -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-web</artifactId>
-			<version>14.0.2.1</version>
+			<version>16</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>14.0.2.1</version>
+			<version>16</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
-			<version>14.0.2.1</version>
+			<version>16</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>14.0.2.1</version>
+			<version>16</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>14.0.2.1</version>
+			<version>16</version>
 		</dependency>
 
 

@@ -8,20 +8,20 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/junit/junit/4.10/junit-4.10.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-media/14.0.2.1/javafx-media-14.0.2.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-media/14.0.2.1/javafx-media-14.0.2.1-win.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-swing/14.0.2.1/javafx-swing-14.0.2.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-swing/14.0.2.1/javafx-swing-14.0.2.1-win.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-web/14.0.2.1/javafx-web-14.0.2.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-web/14.0.2.1/javafx-web-14.0.2.1-win.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-fxml/14.0.2.1/javafx-fxml-14.0.2.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-fxml/14.0.2.1/javafx-fxml-14.0.2.1-win.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-base/14.0.2.1/javafx-base-14.0.2.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-base/14.0.2.1/javafx-base-14.0.2.1-win.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-graphics/14.0.2.1/javafx-graphics-14.0.2.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-graphics/14.0.2.1/javafx-graphics-14.0.2.1-win.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-controls/14.0.2.1/javafx-controls-14.0.2.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-controls/14.0.2.1/javafx-controls-14.0.2.1-win.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-media/16/javafx-media-16.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-media/16/javafx-media-16-win.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-swing/16/javafx-swing-16.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-swing/16/javafx-swing-16-win.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-web/16/javafx-web-16.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-web/16/javafx-web-16-win.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-fxml/16/javafx-fxml-16.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-fxml/16/javafx-fxml-16-win.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-base/16/javafx-base-16.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-base/16/javafx-base-16-win.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-graphics/16/javafx-graphics-16.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-graphics/16/javafx-graphics-16-win.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-controls/16/javafx-controls-16.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openjfx/javafx-controls/16/javafx-controls-16-win.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/code/gson/gson/2.8.5/gson-2.8.5.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/httpcomponents/httpcore/4.4.13/httpcore-4.4.13.jar" enabled="true" runInBatchMode="false"/>

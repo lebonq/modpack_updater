@@ -8,7 +8,7 @@ Ce logiciel permet de maintenir les mods [Fabric](https://fabricmc.net/) des jou
 
 ## Utilisation
 
-**Necessite Java 14 au minimun**
+**Necessite Java 16 au minimun**
 
 Le programme est à exécuter avec le dossier config dans le meme repertoire.
 

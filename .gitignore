@@ -26,3 +26,4 @@ target/*
 .vscode/*
 .settings/*
 .factorypath
+.idea

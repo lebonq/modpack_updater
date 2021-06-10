@@ -72,9 +72,12 @@ public class ModsManager {
                     }
                     break;
                 }
-                if (local == this.aNumberOfMods - 1){
+                if (local == this.aNumberOfMods-1){
                     Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[remote][2].replaceAll(".json", ""), pFiles[remote][0], false, this.aFilesManager.getModFolder().getAbsolutePath()+"/", 0,true,this.aController);
                 }
+            }
+            if(this.aNumberOfMods == 0){
+                Downloader.downloadFile(this.aServerConfig.modpackClient() + pFiles[remote][2].replaceAll(".json", ""), pFiles[remote][0], false, this.aFilesManager.getModFolder().getAbsolutePath() + "/", 0, true, this.aController);
             }
         }
 
