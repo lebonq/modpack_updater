@@ -1,6 +1,7 @@
 [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/lebonq/modpack_updater.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/lebonq/modpack_updater/context:java)
 
-NEED A BIG REWRITE BECAUSE THE CODE IS... WELL HORRIBLE
+NEED A BIG REWRITE   
+Don't work anymore because of Mojang new account policy.
 
 # modpack_updater
 
