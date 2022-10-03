@@ -56,9 +56,12 @@ public class Fabric {
                 ZipEntry vNext = vEntries.nextElement();
                 AppController.LOGGER.log(Level.INFO,"{}",vNext.getName());
 
-                File vNextFolder = new File(pVersionPath.getAbsolutePath().substring(0, pVersionPath.getAbsolutePath().lastIndexOf("\\")) + "/"  + vNext.getName().substring(0,  vNext.getName().lastIndexOf("/")));
+                File vNextFolder = new File(pVersionPath.getAbsolutePath().substring(0,pVersionPath.getAbsolutePath().lastIndexOf("\\")),vNext.getName().substring(0,  vNext.getName().lastIndexOf("/")));
                 vNextFolder.mkdirs();
-                File vNextFile = new File(pVersionPath.getAbsolutePath().substring(0, pVersionPath.getAbsolutePath().lastIndexOf("\\")) + "/" + vNext.getName()); //On cree un fichier temporaire
+                File vNextFile = new File(pVersionPath.getAbsolutePath().substring(0,pVersionPath.getAbsolutePath().lastIndexOf("\\")),vNext.getName());
+                if(!vNextFile.toPath().normalize().startsWith(pVersionPath.getAbsolutePath().substring(0,pVersionPath.getAbsolutePath().lastIndexOf("\\")))) {
+                    throw new IOException("Bad zip entry");
+                } //On cree un fichier temporaire
                
                 if(!(vEntries.hasMoreElements())){
                     if(vNextFile.exists()){

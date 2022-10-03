@@ -51,10 +51,13 @@ public class LibrarieNative extends Librarie {
                     if(vEntry.isDirectory()){//Si c'est un directory on recupere tout dedans avant d'aller plus loins
                     }
                     else{
-                        File vFileOut = new File(pBin + "/" +vEntry.getName());
+                        File vFileOut = new File(pBin,vEntry.getName());
+                        if(!vFileOut.toPath().normalize().startsWith(pBin.toPath().normalize())) {
+                            throw new IOException("Bad zip entry");
+                        }
                         vFileOut.deleteOnExit();
                         if(vEntry.getName().lastIndexOf("/") != -1){//Si == -1 alors c'est un fichier sans dossier
-                            File vFileFolder = new File(pBin + "/" + vEntry.getName().substring(0, vEntry.getName().lastIndexOf("/")));//to create folder without file name
+                            File vFileFolder = new File(pBin,vEntry.getName().substring(0,vEntry.getName().lastIndexOf("/")));//to create folder without file name
                             vFileFolder.mkdirs();
                             vFileFolder.deleteOnExit();//On supprimer le fichier a la du process launcher
                         }
